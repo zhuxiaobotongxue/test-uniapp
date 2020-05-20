@@ -2,11 +2,6 @@
 # yarn lockfile v1
 
 
-add@^2.0.6:
-  version "2.0.6"
-  resolved "http://maven.xys12345.cn/repository/wlsj-npm-group/add/-/add-2.0.6.tgz#248f0a9f6e5a528ef2295dbeec30532130ae2235"
-  integrity sha1-JI8Kn25aUo7yKV2+7DBTITCuIjU=
-
 animate.css@^4.1.0:
   version "4.1.0"
   resolved "https://registry.npm.taobao.org/animate.css/download/animate.css-4.1.0.tgz#dec2aabe4babfc6f6777f9a5cccd132838729b50"
