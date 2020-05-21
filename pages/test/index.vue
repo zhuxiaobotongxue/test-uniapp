@@ -3,7 +3,7 @@
     <!-- 验证动画库 -->
     <view class="margin-top-lg bg-grey animate__animated animate__bounce animate__delay-2s">
       <!-- 验证css库 -->
-      <text class="text-black">用户名： {{ info.name }}</text>
+      <text class="text-black">hello world !</text>
     </view>
     <view class="margin-top-lg bg-grey">
     </view>
@@ -36,8 +36,10 @@ export default {
     // 加载Mock数据
     async fetchMockInfo() {
       const res = await appApis.loadMockInfo();
-      this.info = res.data;
-      // console.color(res)
+      this.info = res.data.obj;
+      console.color(this.info)
+      const res2 = await appApis.loadMockList();
+      console.color(res2.data.arr)
     }
   },
   onLoad() {
