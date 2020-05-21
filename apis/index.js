@@ -1,5 +1,5 @@
-import * as appApis from './app.js'
+import * as testApis from './test.js'
 
 export {
-  appApis
+  testApis
 }

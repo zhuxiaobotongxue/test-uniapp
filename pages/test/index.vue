@@ -5,13 +5,12 @@
       <!-- 验证css库 -->
       <text class="text-black">hello world !</text>
     </view>
-    <view class="margin-top-lg bg-grey">
-    </view>
+    <view class="margin-top-lg bg-grey"></view>
   </view>
 </template>
 
 <script>
-import { appApis } from '@/apis';
+import { testApis } from '@/apis';
 export default {
   data() {
     return {
@@ -23,11 +22,11 @@ export default {
     testUtils() {
       const R = this.$utils;
       const res = R.add(1, 2);
-      console.color(res);
+      // console.color(res);
     },
     // 验证表单验证库
     testValidator() {
-      console.color(this.$validator.isMobilePhone('15991856228'));
+      // console.color(this.$validator.isMobilePhone('15991856228'));
     },
     // 验证网络请求
     testMock() {
@@ -35,17 +34,25 @@ export default {
     },
     // 加载Mock数据
     async fetchMockInfo() {
-      const res = await appApis.loadMockInfo();
+      const res = await testApis.loadMockInfo();
       this.info = res.data.obj;
-      console.color(this.info)
-      const res2 = await appApis.loadMockList();
-      console.color(res2.data.arr)
+      // console.color(this.info);
+      const res2 = await testApis.loadMockList();
+      // console.color(res2.data.arr);
+      const res3 = await testApis.save();
+      // console.color(res3.data);
+    },
+    // 加载写死的数据
+    async testPromise() {
+      const res = await testApis.loadStaticInfo();
+      // console.color(res);
     }
   },
   onLoad() {
     this.testUtils();
     this.testValidator();
     this.testMock();
+    this.testPromise();
   }
 };
 </script>

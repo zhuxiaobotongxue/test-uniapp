@@ -22,8 +22,8 @@ export const mockInfo = {
 export const mockList = {
   code: 200,
   data: {
-    "arr|1-10": [{
-      "id": "@guid",
+    "arr|3-15": [{
+      "id": "@id",
       "title": "@cparagraph(1)",
       "desc": "@cparagraph",
       "label|+1": [
@@ -36,3 +36,14 @@ export const mockList = {
     }]
   }
 };
+/**
+ * @function 编辑post接口返回数据
+ */
+export const save = {
+  code: 200,
+  data: {
+    code: 200,
+    message: '提交成功'
+  }
+};
+
