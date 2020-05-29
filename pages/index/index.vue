@@ -3,7 +3,6 @@
 </template>
 
 <script>
-import { appApis } from '@/apis';
 export default {
   methods: {
     handleTest() {
