@@ -11,13 +11,29 @@
 
 <script>
 import { testApis } from '@/apis';
+import form from '@/mixins/form';
 export default {
+  mixins: [form],
   data() {
     return {
-      info: {}
+      info: {},
+      formInfo: {
+        section1: {
+          name: 'xxx',
+          tel: '15991856228'
+        }
+      }
     };
   },
   methods: {
+    /**
+     * @function 提交
+     * @param {obj} info 经适配后的提交数据
+     * @description 该方法必须复写，处理提交业务
+     */
+    async handleSubmit(info) {
+      return await testApis.loadMockList(info);
+    },
     /**
      * @function 验证通用方法库:函数式编程[最合适同步特质的纯运算]
      * @description 需求模拟：输入模拟的请求数据obj配置，输出经过函数运算后的复合数组
@@ -26,7 +42,18 @@ export default {
       // this.testFun1();
       // this.testFun2();
       // this.testFun3();
-      this.testFun4();
+      // this.testFun4();
+      this.testFun5();
+    },
+    // 验证实用的ramda函数
+    testFun5() {
+      const R = this.$utils;
+      // 声明基础函数
+      // 函数合成
+      // const run = R.pipe()
+      // 执行并验证
+      // let res = {}
+      // console.color(run(res))
     },
     // 实战演练函数式
     // 需求:根据服务器返回的数据，找到用户 Scott 的所有未完成任务，并按日期升序排列
@@ -51,11 +78,41 @@ export default {
       let res = {
         code: 200,
         data: [
-          { id: 1, name: 'Scott', date: '2019-02-01', complete: false, title: '干啥都行' },
-          { id: 2, name: 'ZhangSan', date: '2013-02-01', complete: true, title: '一无所获' },
-          { id: 3, name: 'Scott', date: '2015-02-01', complete: false, title: '烦死' },
-          { id: 4, name: 'Scott', date: '2016-02-01', complete: true, title: '五四运动' },
-          { id: 5, name: 'Scott', date: '2013-02-01', complete: false, title: '你说的对' }
+          {
+            id: 1,
+            name: 'Scott',
+            date: '2019-02-01',
+            complete: false,
+            title: '干啥都行'
+          },
+          {
+            id: 2,
+            name: 'ZhangSan',
+            date: '2013-02-01',
+            complete: true,
+            title: '一无所获'
+          },
+          {
+            id: 3,
+            name: 'Scott',
+            date: '2015-02-01',
+            complete: false,
+            title: '烦死'
+          },
+          {
+            id: 4,
+            name: 'Scott',
+            date: '2016-02-01',
+            complete: true,
+            title: '五四运动'
+          },
+          {
+            id: 5,
+            name: 'Scott',
+            date: '2013-02-01',
+            complete: false,
+            title: '你说的对'
+          }
         ]
       };
       console.color(getIncompleteTaskSummaries(res));
@@ -69,7 +126,7 @@ export default {
       const splitBySpace = s => s.split(' '); // 以空格分割单词
       const getLength = x => x.length; // 每个单词的长度
       const getLengthArr = arr => R.map(getLength, arr); // 词的数组转换成长度的数组
-      const getBiggerNumber = (a, b) => (a > b ? a : b); // 返回较大的数字，该函数的存在就是为了作为下面这个函数的输入，并没有直接应用到“函数合成”中
+      const getBiggerNumber = (a, b) => (a > b ? a : b); // 返回较大的数字，该函数的存在就是为了作为下面这个函数的输入，并没有直接应用到“函数合成”中,若要应用到函数合成中，被操作数必须具有传递性
       const findBiggestNumber = arr => R.reduce(getBiggerNumber, 0, arr); // 返回最大的一个数字
       // 函数合成
       const getLongestWordLength = R.pipe(
@@ -158,6 +215,7 @@ export default {
     // this.testValidator();
     // this.testMock();
     // this.testPromise();
+    // this.onSubmit();
     // 打印当前vue页对象
     // console.color(this)
   }
