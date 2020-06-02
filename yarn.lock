@@ -37,6 +37,13 @@ deepmerge@^4.2.2:
   resolved "https://registry.npm.taobao.org/deepmerge/download/deepmerge-4.2.2.tgz?cache=0&sync_timestamp=1572279720382&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fdeepmerge%2Fdownload%2Fdeepmerge-4.2.2.tgz#44d2ea3679b8f4d4ffba33f03d865fc1e7bf4955"
   integrity sha1-RNLqNnm49NT/ujPwPYZfwee/SVU=
 
+dingtalk-jsapi@^2.10.3:
+  version "2.10.3"
+  resolved "https://registry.npm.taobao.org/dingtalk-jsapi/download/dingtalk-jsapi-2.10.3.tgz#ade5c2f858f4ac41143d294ae172b34efaeb95e2"
+  integrity sha1-reXC+Fj0rEEUPSlK4XKzTvrrleI=
+  dependencies:
+    promise-polyfill "^7.1.0"
+
 is-buffer@~1.1.1:
   version "1.1.6"
   resolved "https://registry.npm.taobao.org/is-buffer/download/is-buffer-1.1.6.tgz#efaa2ea9daa0d7ab2ea13a97b2b8ad51fefbe8be"
@@ -57,6 +64,11 @@ mockjs@^1.1.0:
   integrity sha1-5qDDeOkZBtuv8gkRzAJzs8fXWwY=
   dependencies:
     commander "*"
+
+promise-polyfill@^7.1.0:
+  version "7.1.2"
+  resolved "https://registry.npm.taobao.org/promise-polyfill/download/promise-polyfill-7.1.2.tgz#ab05301d8c28536301622d69227632269a70ca3b"
+  integrity sha1-qwUwHYwoU2MBYi1pInYyJppwyjs=
 
 query-string@^6.9.0:
   version "6.12.1"

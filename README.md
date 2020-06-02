@@ -17,3 +17,18 @@
 ColorUI样式库，同时可在common.scss中自定义扩展
 
 开发环境mockjs启用，可以很好的支援开发进度
+
+## 钉钉应用开发规范小思
+1.统一的技术体系（兼容多端）
+开发工具:HBuilder X(2.6.16)、(阿里)小程序开发工具 (1.12.15)
+项目脚手架:  uni-app(uni-ui项目)
+js框架: vue2.x
+js编程语言标准：ES6+
+可用jsAPI:[uniapp](https://uniapp.dcloud.io/api/README) + [钉钉开发文档](https://ding-doc.dingtalk.com/doc#/dev/qtknfc)
+css样式基础库：ColorUI
+css编程语言标准：scss[注：nvue需独立编写]
+
+引入本地化功能插件：
+"zh-uni-request": "^1.0.2"  针对网络请求的封装
+
+2.可配置化的功能模块

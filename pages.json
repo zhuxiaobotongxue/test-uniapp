@@ -9,7 +9,11 @@
     "style": {
       "navigationBarTitleText": "测试页面"
     }
-  }],
+  }    ,{
+            "path" : "pages/test/dingding",
+            "style" : {}
+        }
+    ],
   "globalStyle": {
     "navigationBarTextStyle": "white",
     "navigationBarTitleText": "uni-app",

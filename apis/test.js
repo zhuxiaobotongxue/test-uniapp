@@ -20,7 +20,7 @@ export const save = () => httpRequest.post('/api/save')
  * @function 测试生产环境需要数据，用Promise直接返回
  */
 export const loadStaticInfo = () => {
-  return new Promise((resolve, reject)=>{
+  return new Promise((resolve, reject) => {
     resolve({
       code: 200,
       data: {
@@ -30,3 +30,9 @@ export const loadStaticInfo = () => {
     })
   })
 }
+/**
+ * @function 网络请求，获取token
+ */
+export const getToken = (params) => httpRequest.get('/gettoken', {
+  params
+})

@@ -1,12 +1,18 @@
 <template>
-  <view class="container"><button @click="handleTest">打开测试页面</button></view>
+  <view class="container">
+    <button @click="handleTest1">打开测试页面</button>
+    <button @click="handleTest2">打开钉钉测试页面</button>
+  </view>
 </template>
 
 <script>
 export default {
   methods: {
-    handleTest() {
+    handleTest1() {
       uni.navigateTo({ url: '/pages/test/index' });
+    },
+    handleTest2() {
+      uni.navigateTo({ url: '/pages/test/dingding' });
     }
   }
 };

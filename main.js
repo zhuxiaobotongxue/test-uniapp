@@ -8,6 +8,11 @@ import {
   tool
 } from '@/utils'
 
+/* #ifdef H5 */
+import * as dd from 'dingtalk-jsapi'
+Vue.prototype.$dd = dd
+/* #endif */
+
 Vue.config.productionTip = false
 Vue.prototype.$validator = validator
 Vue.prototype.$utils = R
