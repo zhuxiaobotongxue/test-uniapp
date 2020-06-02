@@ -1,5 +1,15 @@
 import dayjs from 'dayjs'
+import qs from '@/libs/query-string'
 
+export const objDecode = params => {
+  let _params = {}
+  let objKes = Object.keys(params)
+  objKes.forEach(item => {
+    let _val = params[item]
+    _params[item] = decodeURIComponent(_val)
+  })
+  return _params
+}
 // 日期格式化
 export const parseDate = (date, format = 'YYYY-MM-DD HH:mm:ss') => {
   return dayjs(date).format(format)
@@ -15,4 +25,32 @@ export const colorLog = (...rest) => {
       'color: #0000ff', ':', item)
   }
   console.log('%c %s', 'color: #7f8c8d', '----------end----------')
+}
+/** 
+ * @function 封装路由
+ */
+export const routerUtil = {
+  navigateTo({
+    url,
+    params = {}
+  }) {
+    let _paramStr = qs.stringify(params)
+    uni.navigateTo({
+      url: _paramStr ? `${url}?${_paramStr}` : url
+    })
+  },
+  goWebview({
+    url,
+    title,
+    params = {}
+  }) {
+    let _paramStr = qs.stringify({
+      url,
+      title,
+      ...params
+    })
+    uni.navigateTo({
+      url: `/pages/webview/web?${_paramStr}`
+    })
+  }
 }

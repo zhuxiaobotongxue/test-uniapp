@@ -2,16 +2,51 @@
   "pages": [{
     "path": "pages/index/index",
     "style": {
-      "navigationBarTitleText": "uni-ui基础项目"
+      "navigationBarTitleText": "uni-ui融合实践"
     }
   }, {
     "path": "pages/test/index",
     "style": {
-      "navigationBarTitleText": "测试页面"
+      "navigationBarTitleText": "测试"
     }
-  }    ,{
-            "path" : "pages/test/dingding",
-            "style" : {}
+  }, {
+    "path": "pages/test/dingding",
+    "style": {
+      "navigationBarTitleText": "钉钉"
+    }
+  }, {
+    "path": "pages/example/form",
+    "style": {
+      "navigationBarTitleText": "表单"
+    }
+  }, {
+    "path": "pages/test/test",
+    "style": {
+      "navigationBarTitleText": "通用测试"
+    }
+  }, {
+    "path": "pages/test/ramda",
+    "style": {
+      "navigationBarTitleText": "函数式"
+    }
+  }, {
+    "path": "pages/test/http",
+    "style": {
+      "navigationBarTitleText": "请求"
+    }
+  }, {
+    "path": "pages/webview/web",
+    "style": {
+      "navigationBarTitleText": "",
+      "app-plus": {
+        "titleNView": false
+      }
+    }
+  }, {
+            "path" : "pages/webview/mp-view",
+            "style" : {
+              
+            }
         }
     ],
   "globalStyle": {

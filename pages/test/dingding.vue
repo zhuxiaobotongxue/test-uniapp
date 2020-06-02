@@ -1,6 +1,6 @@
 <template>
   <view class="container">
-    <view class="margin-top-lg bg-grey"><text class="text-black">hello world !</text></view>
+    <view class="margin-top-lg bg-grey"><text class="text-black">钉钉环境支持测试</text></view>
   </view>
 </template>
 
