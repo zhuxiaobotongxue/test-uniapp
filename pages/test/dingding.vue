@@ -33,11 +33,71 @@ export default {
     },
     // 测试H5环境
     testH5() {
+      let _env = '未知环境';
+      // 判断方式一
       if (this.$dd.env.platform === 'notInDingTalk') {
-        console.color('我在非钉钉内置浏览器');
+        _env = '非钉钉_H5';
       } else {
-        console.color('我在钉钉内置浏览器');
+        _env = '钉钉_H5';
       }
+      // 判断方式二，比方式一分类更具体
+      // if (this.$dd.other) {
+      //   _env = '非钉钉_H5';
+      // } else if (this.$dd.android) {
+      //   _env = '钉钉_android_H5';
+      // } else if (this.$dd.ios) {
+      //   _env = '钉钉_ios_H5';
+      // } else if (this.$dd.pc) {
+      //   _env = '钉钉_pc_H5';
+      // }
+
+      uni.showToast({
+        title: _env,
+        duration: 5000
+      });
+    },
+    // 写一个方法兼容各端，程序不用操心各终端环境判断的繁琐
+    testMethod() {
+      this.runMethod();
+    },
+    // 被测试的方法
+    runMethod() {
+      class EnvDiff {
+        constructor() {
+          this.env = '未知环境';
+        }
+        run() {
+          uni.showToast({
+            title: this.env,
+            duration: 5000
+          });
+        }
+        notInDingTalk() {
+          this.env = '非钉钉_H5';
+          this.run();
+        }
+        pc() {
+          this.env = '钉钉_PC_H5';
+          this.run();
+        }
+        android() {
+          this.env = '钉钉_ANDROID_H5';
+          this.run();
+        }
+        ios(){
+          this.env = '钉钉_IOS_H5';
+          this.run();
+        }
+      }
+
+      class MyMethod extends EnvDiff {}
+
+      let myMethod = new MyMethod();
+      // uni.showToast({
+      //   title: this.$dd.env.platform,
+      //   duration: 5000
+      // })
+      myMethod[this.$dd.env.platform]();
     }
   },
   onLoad() {
@@ -49,8 +109,9 @@ export default {
     /* #endif */
     // H5 && 微应用
     /* #ifdef H5 */
-    this.testH5();
+    // this.testH5();
     /* #endif */
+    this.testMethod();
   }
 };
 </script>
