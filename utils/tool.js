@@ -10,6 +10,12 @@ export const objDecode = params => {
   })
   return _params
 }
+// url 参数拼接
+export const urlAndParams = (url, params) => {
+  let _params = qs.stringify(params)
+  let _url = _params ? `${url}?${_params}` : url
+  return _url
+}
 // 日期格式化
 export const parseDate = (date, format = 'YYYY-MM-DD HH:mm:ss') => {
   return dayjs(date).format(format)
@@ -30,6 +36,19 @@ export const colorLog = (...rest) => {
  * @function 封装路由
  */
 export const routerUtil = {
+  goHomePage(params = {}) {
+    let url = urlAndParams('/pages/home/index', params)
+    uni.switchTab({
+    	url
+    })
+  },
+	goAuthPage(callback, params = {}) {
+		let url = urlAndParams('/pages/account/signin', params)
+		uni.reLaunch({
+			url,
+			success: callback
+		})
+	},
   navigateTo({
     url,
     params = {}

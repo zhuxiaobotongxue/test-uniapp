@@ -7,5 +7,6 @@ const BaseUrl = baseUrls[env]
 
 export default {
   // Api 接口 根路径
-  BaseUrl
+  BaseUrl,
+  corpId: 'dingb016f788dc398bd5bc961a6cb783455b' // 企业id，用于微应用免登
 }

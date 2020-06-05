@@ -6,7 +6,7 @@
 
 <script>
 import { testApis } from '@/apis';
-// import * as dd from 'dingtalk-jsapi';
+import { EnvDiffInH5 } from '@/libs/interface'
 export default {
   methods: {
     // 测试jsapi
@@ -58,46 +58,16 @@ export default {
     },
     // 写一个方法兼容各端，程序不用操心各终端环境判断的繁琐
     testMethod() {
-      this.runMethod();
+      this.testH5();
     },
     // 被测试的方法
-    runMethod() {
-      class EnvDiff {
-        constructor() {
-          this.env = '未知环境';
-        }
-        run() {
-          uni.showToast({
-            title: this.env,
-            duration: 5000
-          });
-        }
-        notInDingTalk() {
-          this.env = '非钉钉_H5';
-          this.run();
-        }
-        pc() {
-          this.env = '钉钉_PC_H5';
-          this.run();
-        }
-        android() {
-          this.env = '钉钉_ANDROID_H5';
-          this.run();
-        }
-        ios(){
-          this.env = '钉钉_IOS_H5';
-          this.run();
-        }
-      }
-
-      class MyMethod extends EnvDiff {}
+    testH5() {
+      class MyMethod extends EnvDiffInH5 {}
 
       let myMethod = new MyMethod();
-      // uni.showToast({
-      //   title: this.$dd.env.platform,
-      //   duration: 5000
-      // })
+      // #ifdef H5
       myMethod[this.$dd.env.platform]();
+      // #endif
     }
   },
   onLoad() {

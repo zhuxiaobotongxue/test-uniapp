@@ -2,7 +2,19 @@
   "pages": [{
     "path": "pages/index/index",
     "style": {
-      "navigationBarTitleText": "uni-ui融合实践"
+      "navigationBarTitleText": "uni融合实践"
+    }
+  }, {
+    "path": "pages/home/index",
+    "style": {
+      "navigationBarTitleText": "uni融合实践",
+      "app-plus": {
+        // #ifdef H5
+        "titleNView": false,
+        // #endif
+        "navigationBarTextStyle": "white",
+        "navigationBarBackgroundColor": "#3277FF"
+      }
     }
   }, {
     "path": "pages/test/index",
@@ -43,16 +55,50 @@
       }
     }
   }, {
-            "path" : "pages/webview/mp-view",
-            "style" : {
-              
-            }
-        }
-    ],
+    "path": "pages/webview/mp-view",
+    "style": {
+      "navigationBarTitleText": "",
+      "app-plus": {
+        "titleNView": false
+      }
+    }
+  }, {
+    "path": "pages/user/index",
+    "style": {
+      "navigationBarTitleText": "我的"
+    }
+  }, {
+    "path": "pages/account/signin",
+    "style": {
+      "navigationBarTitleText": "登录"
+    }
+  }],
+  "tabBar": {
+    "borderStyle": "black",
+    "backgroundColor": "#FFFFFF",
+    "color": "#8F8F94",
+    "selectedColor": "#FF0000",
+    "list": [{
+        "pagePath": "pages/home/index",
+        "iconPath": "static/icons/tabbar/home.png",
+        "selectedIconPath": "static/icons/tabbar/home_active.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/user/index",
+        "iconPath": "static/icons/tabbar/user.png",
+        "selectedIconPath": "static/icons/tabbar/user_active.png",
+        "text": "我的"
+      }
+    ]
+  },
   "globalStyle": {
-    "navigationBarTextStyle": "white",
-    "navigationBarTitleText": "uni-app",
-    "navigationBarBackgroundColor": "#007AFF",
-    "backgroundColor": "#FFFFFF"
+    // #ifndef MP-ALIPAY
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "uni融合实践",
+    "navigationStyle": "custom",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+    // #endif
   }
 }

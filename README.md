@@ -32,3 +32,6 @@ css编程语言标准：scss[注：nvue需独立编写]
 "zh-uni-request": "^1.0.2"  针对网络请求的封装
 
 2.可配置化的功能模块
+
+## 微应用移动端调试
+./ding -config=./ding.cfg -subdomain=zxb111 8082
