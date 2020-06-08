@@ -21,8 +21,8 @@
           </view>
         </view>
       </view>
-      <view class="margin" v-if="showSignBtn"><button class="cu-btn round line-blue lg block" @click="handleSignOut">退出登录</button></view>
     </view>
+    <view class="margin flex flex-direction" v-if="showSignBtn"><button class="cu-btn round line-blue lg block" @click="handleSignOut">退出登录</button></view>
   </view>
 </template>
 

@@ -1,6 +1,7 @@
-import appConfig from './app.config.js'
-import themeConfig from './theme.config.js'
+import AppConf from './app.config.js'
+import ThemeConf from './theme.config.js'
 
-const config = Object.assign({}, appConfig, themeConfig)
-
-export default config
+export {
+  AppConf,
+  ThemeConf
+}

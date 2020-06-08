@@ -4,7 +4,7 @@
 
 <script>
 import { EnvDiffInH5 } from '@/libs/interface';
-import Config from '@/config';
+import { AppConf } from '@/config';
 import { tool } from '@/utils';
 export default {
   methods: {
@@ -27,7 +27,7 @@ export default {
           const dd = that.$dd;
           dd.ready(function() {
             dd.runtime.permission.requestAuthCode({
-              corpId: Config.corpId,
+              corpId: AppConf.CorpId,
               onSuccess: function(result) {
                 if (result && result.code) {
                   uni.showToast({

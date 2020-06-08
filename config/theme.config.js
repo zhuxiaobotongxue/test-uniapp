@@ -1,11 +1,11 @@
 export default {
-  navigationBar: {
+  NavigationBar: {
     // 默认
     default: {
 
     },
     // 黑暗主题
-    dark: {
+    Dark: {
       'color': '#ffffff',
       'background-color': '#000000',
     }

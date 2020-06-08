@@ -1,10 +1,12 @@
 import Request from 'zh-uni-request'
-import sysConfig from '@/config'
+import {
+  AppConf
+} from '@/config'
 
 const http = new Request()
 
 http.setConfig((config) => {
-  config.baseUrl = sysConfig.BaseUrl
+  config.baseUrl = AppConf.BaseUrl
 
   return config
 })
