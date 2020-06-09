@@ -33,13 +33,17 @@
           <input placeholder="请输入密码" password v-model="auth.account.pwd" />
         </view>
       </template>
-      <view class="margin flex flex-direction"><button class="cu-btn bg-blue margin-tb-sm lg">登录</button></view>
+      <view class="margin flex flex-direction">
+        <button class="cu-btn bg-blue margin-tb-sm lg" @click="onSubmit">
+          {{ auth.opType === AUTH_MODES.REGIST ? '注册' : auth.opType === AUTH_MODES.FORGET ? '修改' : '登录' }}
+        </button>
+      </view>
     </form>
-    <!-- <template>
+    <template v-if="AuthConf.Account && AuthConf.Captcha && [AUTH_MODES.ACCOUNT, AUTH_MODES.CAPTCHA].includes(auth.opType)">
       <view class="margin flex flex-direction">
         <button plain size="mini" class="toggle-btn" @click="toggleOpType">{{ auth.opType === AUTH_MODES.CAPTCHA ? '手机号密码' : '短信验证码' }}登录</button>
       </view>
-    </template> -->
+    </template>
     <template>
       <view class="margin flex justify-between">
         <button v-if="AuthConf.Regist && auth.opType === AUTH_MODES.ACCOUNT" plain size="mini" class="toggle-btn" @click="auth.opType = AUTH_MODES.REGIST">注册</button>
@@ -58,15 +62,19 @@ import { mapGetters, mapActions } from 'vuex';
 import { AppConf } from '@/config';
 import { APP_CONST } from '@/constants';
 import { pushMsg } from '@/apis';
+import form from '@/mixins/form';
 export default {
+  mixins: [form],
   data() {
     return {
       auth: {
-        opType: '',
+        opType: '', // 功能类型控制器
+        // 账号密码
         account: {
           name: '',
           pwd: ''
         },
+        // 短信验证码、注册、忘记密码
         captcha: {
           tel: '',
           code: '',
@@ -77,14 +85,47 @@ export default {
     };
   },
   computed: { AUTH_MODES: () => APP_CONST.AUTH_MODES, AuthConf: () => AppConf.Auth },
-  mounted() {
-    this.auth.opType = this.AUTH_MODES.ACCOUNT;
+  created() {
+    this.init();
   },
   methods: {
     ...mapActions(['regist', 'login']),
+    // 初始化:默认账号密码方式登录，若它主动配置了false,则检查验证码登录方式
+    init() {
+      if (this.AuthConf.Account) {
+        this.auth.opType = this.AUTH_MODES.ACCOUNT;
+      } else if (this.AuthConf.Captcha) {
+        this.auth.opType = this.AUTH_MODES.CAPTCHA;
+      }
+    },
     // 切换登录方式:密码和验证码相互切换
     toggleOpType() {
       this.auth.opType = this.auth.opType === this.AUTH_MODES.ACCOUNT ? this.AUTH_MODES.CAPTCHA : this.AUTH_MODES.ACCOUNT;
+    },
+    /**
+     * @function 提交
+     * @param {obj} info 经适配后的提交数据
+     * @description 该方法必须复写，处理提交业务
+     */
+    async handleSubmit(info) {
+      // return await testApis.loadMockList(info);
+    },
+    /**
+     * @function 验证表单
+     * @description 若不复写该方法，默认验证通过
+     */
+    verify() {
+      switch (this.auth.opType) {
+        case this.AUTH_MODES.ACCOUNT:
+          const { account } = this.auth;
+          if (!this.$validator.isMobilePhone(account.name, 'zh-CN')) {
+            throw '手机号码不符合规范!';
+          }
+          if (!account.pwd || !account.pwd.trim()) {
+            throw '密码不能为空!';
+          }
+          break;
+      }
     }
   }
 };

@@ -90,7 +90,7 @@ export default {
       if (res && res.code === 200) {
         this.dealResult(res);
       } else {
-        throw res;
+        throw res || 'handleSubmit未返回标准格式';
       }
     }
   }
