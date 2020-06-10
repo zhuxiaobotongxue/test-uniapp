@@ -1,3 +1,9 @@
+import {
+  APP_CONST
+} from '@/constants';
+import {
+  userApis
+} from '@/apis'
 export default {
   state: {
     userInfo: null,
@@ -22,6 +28,46 @@ export default {
     }
   },
   actions: {
+    signin({
+      commit
+    }, {
+      type,
+      name,
+      pwd,
+      tel,
+      code,
+      rePwd
+    }) {
+      return new Promise(async (resolve, reject) => {
+        let result = null
+        if (type === APP_CONST.AUTH_MODES.ACCOUNT) {
+          let {
+            data: res
+          } = await userApis.signinByPwd({
+            name,
+            pwd
+          })
+          result = res
+        }
+        if (type === APP_CONST.AUTH_MODES.CAPTCHA) {
+          let {
+            data: res
+          } = await userApis.signinByCode({
+            tel,
+            code
+          })
+          result = res
+        }
+        // 处理结果
+        if (result && result.token && result.userInfo) {
+          commit('SET_USERINFO', result.userInfo)
+          commit('SET_TOKEN', result.token)
+          resolve(result.userInfo)
+        } else {
+          reject('返回信息格式不规范！')
+        }
+      })
+    },
     signOut({
       commit
     }) {

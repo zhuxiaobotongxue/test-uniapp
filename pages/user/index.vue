@@ -5,7 +5,7 @@
       <view class="cu-item user-card-wrap">
         <view class="user-card" v-if="userInfo">
           <image class="cu-avatar round" :src="avatar" mode="scaleToFill" @tap="onTapEditor"></image>
-          <view class="cu-username" @tap="onTapEditor">{{ userInfo.realname }}</view>
+          <view class="cu-username" @tap="onTapEditor">{{ userInfo.name }}</view>
         </view>
       </view>
       <view class="cu-item">

@@ -62,6 +62,7 @@ import { mapGetters, mapActions } from 'vuex';
 import { AppConf } from '@/config';
 import { APP_CONST } from '@/constants';
 import { pushMsg } from '@/apis';
+import { tool } from '@/utils'
 import form from '@/mixins/form';
 export default {
   mixins: [form],
@@ -89,7 +90,7 @@ export default {
     this.init();
   },
   methods: {
-    ...mapActions(['regist', 'login']),
+    ...mapActions(['regist', 'signin']),
     // 初始化:默认账号密码方式登录，若它主动配置了false,则检查验证码登录方式
     init() {
       if (this.AuthConf.Account) {
@@ -103,29 +104,102 @@ export default {
       this.auth.opType = this.auth.opType === this.AUTH_MODES.ACCOUNT ? this.AUTH_MODES.CAPTCHA : this.AUTH_MODES.ACCOUNT;
     },
     /**
-     * @function 提交
-     * @param {obj} info 经适配后的提交数据
-     * @description 该方法必须复写，处理提交业务
-     */
-    async handleSubmit(info) {
-      // return await testApis.loadMockList(info);
-    },
-    /**
      * @function 验证表单
      * @description 若不复写该方法，默认验证通过
      */
     verify() {
-      switch (this.auth.opType) {
-        case this.AUTH_MODES.ACCOUNT:
-          const { account } = this.auth;
+      const { account, captcha } = this.auth;
+      let verifyObj = {
+        ACCOUNT: () => {
           if (!this.$validator.isMobilePhone(account.name, 'zh-CN')) {
             throw '手机号码不符合规范!';
           }
           if (!account.pwd || !account.pwd.trim()) {
             throw '密码不能为空!';
           }
-          break;
-      }
+        },
+        CAPTCHA: () => {
+          if (!this.$validator.isMobilePhone(captcha.tel, 'zh-CN')) {
+            throw '手机号码不符合规范!';
+          }
+          if (!captcha.code || !captcha.code.trim()) {
+            throw '验证码不能为空!';
+          }
+        },
+        REGIST: () => {
+          if (!this.$validator.isMobilePhone(captcha.tel, 'zh-CN')) {
+            throw '手机号码不符合规范!';
+          }
+          if (!captcha.code || !captcha.code.trim()) {
+            throw '验证码不能为空!';
+          }
+          if (!captcha.pwd || !captcha.pwd.trim()) {
+            throw '新密码不能为空!';
+          }
+          if (!captcha.rePwd || !captcha.rePwd.trim()) {
+            throw '重复密码不能为空!';
+          }
+          if (captcha.pwd !== captcha.rePwd) {
+            throw '两次密码输入不一致!';
+          }
+        }
+      };
+      verifyObj.FORGET = verifyObj.REGIST;
+      // 执行
+      verifyObj[this.auth.opType]();
+    },
+    /**
+     * @function 数据适配
+     * @description 若不复写该方法，默认返回空对象
+     */
+    reorganize() {
+      const { account, captcha } = this.auth;
+      let reorganizeObj = {
+        ACCOUNT: () => {
+          return {
+            name: account.name,
+            pwd: account.pwd
+          };
+        },
+        CAPTCHA: () => {
+          return {
+            tel: captcha.tel,
+            code: captcha.code
+          };
+        },
+        REGIST: () => {
+          return {
+            tel: captcha.tel,
+            code: captcha.code,
+            pwd: captcha.pwd,
+            rePwd: captcha.rePwd
+          };
+        }
+      };
+      reorganizeObj.FORGET = reorganizeObj.REGIST;
+      // 执行
+      return reorganizeObj[this.auth.opType]();
+    },
+    /**
+     * @function 提交
+     * @param {obj} info 经适配后的提交数据
+     * @description 该方法必须复写，处理提交业务
+     */
+    handleSubmit(info) {
+      let submitObj = {
+        ACCOUNT: async () => {
+          return await this.signin({ type: this.auth.opType, ...info });
+        }
+      };
+      submitObj.CAPTCHA = submitObj.ACCOUNT;
+      return submitObj[this.auth.opType]();
+    },
+    /**
+     * @function 提交之后
+     * @description 该方法初步处理返回结果，主要控制异常逻辑，也可以复写
+     */
+    submitAfter(res) {
+      tool.routerUtil.goHomePage()
     }
   }
 };

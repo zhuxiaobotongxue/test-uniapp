@@ -10,10 +10,10 @@ export default {
   methods: {
     // 用户名密码登录
     loginByPwd() {
-      uni.showToast({
-        title: '用户名密码登录',
-        duration: 2500
-      });
+      // uni.showToast({
+      //   title: '用户名密码登录',
+      //   duration: 2500
+      // });
       tool.routerUtil.goAuthPage();
     },
     // h5多环境登录
@@ -30,10 +30,10 @@ export default {
               corpId: AppConf.CorpId,
               onSuccess: function(result) {
                 if (result && result.code) {
-                  uni.showToast({
-                    title: '授权码获取成功',
-                    duration: 2500
-                  });
+                  // uni.showToast({
+                  //   title: '授权码获取成功',
+                  //   duration: 2500
+                  // });
                   tool.routerUtil.goHomePage();
                 }
               },
