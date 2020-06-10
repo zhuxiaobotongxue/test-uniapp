@@ -27,7 +27,7 @@ export default {
           const dd = that.$dd;
           dd.ready(function() {
             dd.runtime.permission.requestAuthCode({
-              corpId: AppConf.CorpId,
+              corpId: AppConf.Auth.CorpId,
               onSuccess: function(result) {
                 if (result && result.code) {
                   // uni.showToast({
