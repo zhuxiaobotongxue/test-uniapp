@@ -20,7 +20,7 @@ export default {
     },
     // 验证实用的ramda函数
     testFun5() {
-      const R = this.$utils;
+      const R = this.$R;
       // 声明基础函数
       // 函数合成
       // const run = R.pipe()
@@ -32,7 +32,7 @@ export default {
     // 需求:根据服务器返回的数据，找到用户 Scott 的所有未完成任务，并按日期升序排列
     // 分析:找到用户Scott -> 找到未完成任务 ->按日期升序
     testFun4() {
-      const R = this.$utils;
+      const R = this.$R;
       // 声明基础函数
       const SelectTasks = R.prop('data'); // 提取 data 属性
       const filterMember = member => R.filter(R.propEq('name', member)); // 过滤出指定的用户
@@ -94,7 +94,7 @@ export default {
     // 需求：输出字符串中最长的单词有多少个字符
     // 分析[注意按单输入,最小粒度分析]：字符串要转成数组 -> 得到数组每一项的长度 -> 生成长度数组 -> 从长度数组中找出最大值
     testFun3() {
-      const R = this.$utils;
+      const R = this.$R;
       // 声明基础函数
       const splitBySpace = s => s.split(' '); // 以空格分割单词
       const getLength = x => x.length; // 每个单词的长度
@@ -125,7 +125,7 @@ export default {
     },
     // 练习分析函数式编程案例
     testFun2() {
-      const R = this.$utils;
+      const R = this.$R;
       // 声明基础函数
       const prop = (p, obj) => obj[p]; // 读取对象中的某一属性，注意将被操作数放在最后，方便柯里化
       const propRole = R.curry(prop)('role'); // R.curry可将多参数函数转换成单参数函数,第一个值“prop”就是需要转换的多参数函数，第二个值是提供给多参数函数的一个输入，剩下的输入就是单参数
@@ -145,7 +145,7 @@ export default {
     },
     // 简单的函数式编程实例，理解原理
     testFun1() {
-      const R = this.$utils;
+      const R = this.$R;
       // 声明两个自定义函数[把数据处理的过程，定义成一种与参数无关的合成运算]
       // 扩展：Pointfree 的本质就是使用一些通用的函数[比如：Ramda函数库]，组合出各种复杂运算。
       const addOne = x => x + 1;

@@ -11,11 +11,6 @@
 
 <script>
 export default {
-  data() {
-    return {
-      info: {}
-    };
-  },
   methods: {
     // 验证表单验证库
     testValidator() {

@@ -72,6 +72,16 @@
     "style": {
       "navigationBarTitleText": "登录"
     }
+  }, {
+    "path": "pages/test/temp",
+    "style": {
+      "navigationBarTitleText": "临时测试"
+    }
+  }, {
+    "path": "pages/test/func",
+    "style": {
+      "navigationBarTitleText": "高阶函数"
+    }
   }],
   "tabBar": {
     "borderStyle": "black",
