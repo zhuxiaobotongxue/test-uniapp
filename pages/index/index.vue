@@ -8,20 +8,41 @@ import { AppConf } from '@/config';
 import { tool } from '@/utils';
 export default {
   methods: {
+    // 初始化
+    init() {
+      try {
+        this.signin();
+      } catch (err) {
+        this.$showErr(err);
+      }
+    },
+    // 登录
+    signin() {
+      // #ifdef H5
+      this.signinInH5();
+      // #endif
+      // #ifndef H5
+      this.signinByPwd();
+      // #endif
+    },
     // 用户名密码登录
-    loginByPwd() {
-      // uni.showToast({
-      //   title: '用户名密码登录',
-      //   duration: 2500
-      // });
+    signinByPwd() {
       tool.routerUtil.goAuthPage();
     },
+    // 钉钉免登录
+    signinByDd({ code }) {
+      if (code) {
+        tool.routerUtil.goHomePage();
+      } else {
+        this.$showErr('未提供授权码');
+      }
+    },
     // h5多环境登录
-    loginInH5() {
+    signinInH5() {
       const that = this;
-      class Login extends EnvDiffInH5 {
+      class Signin extends EnvDiffInH5 {
         notInDingTalk() {
-          that.loginByPwd();
+          that.signinByPwd();
         }
         dd() {
           const dd = that.$dd;
@@ -29,36 +50,21 @@ export default {
             dd.runtime.permission.requestAuthCode({
               corpId: AppConf.Auth.CorpId,
               onSuccess: function(result) {
-                if (result && result.code) {
-                  // uni.showToast({
-                  //   title: '授权码获取成功',
-                  //   duration: 2500
-                  // });
-                  tool.routerUtil.goHomePage();
-                }
+                that.signinByDd({ code: result.code });
               },
               onFail: function(err) {
-                uni.showToast({
-                  icon: 'none',
-                  title: '免登授权码获取失败',
-                  duration: 2500
-                });
+                that.$showErr('免登授权码获取失败');
               }
             });
           });
         }
       }
-      let login = new Login();
-      login[this.$dd.env.platform]();
+      let signin = new Signin();
+      signin[this.$dd.env.platform]();
     }
   },
   mounted() {
-    // #ifdef H5
-    this.loginInH5();
-    // #endif
-    // #ifndef H5
-    this.loginByPwd();
-    // #endif
+    this.init();
   }
 };
 </script>

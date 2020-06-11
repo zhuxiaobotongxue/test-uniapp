@@ -5,34 +5,28 @@ import * as R from 'ramda'
 import validator from 'validator'
 import Mock from '@/mock'
 import animated from 'animate.css'
-import {
-  tool
-} from '@/utils'
+import { tool } from '@/utils'
+import MyPlugin from '@/libs/plugin'
 
+console.color = tool.colorLog
+App.mpType = 'app'
+
+Vue.config.productionTip = false
+Vue.use(animated)
+Vue.use(MyPlugin)
+
+Vue.prototype.$store = store
+Vue.prototype.$validator = validator
+Vue.prototype.$R = R
 // #ifdef H5 
 import * as dd from 'dingtalk-jsapi'
 Vue.prototype.$dd = dd
 // #endif
-
-Vue.prototype.$store = store
-Vue.config.productionTip = false
-Vue.prototype.$validator = validator
-Vue.prototype.$utils = R
-Vue.use(animated)
-console.color = tool.colorLog
-
-App.mpType = 'app'
-
 // #ifdef APP-PLUS
-/**
- * version: 客户端的版本名称 
- * versionCode: 客户端的版本号
- * appid: 当前应用的APPID
- */
 const {
-  version,
-  versionCode,
-  appid
+  version, // 客户端的版本名称
+  versionCode, // 客户端的版本号
+  appid // 当前应用的APPID
 } = plus.runtime
 const {
   brand,
