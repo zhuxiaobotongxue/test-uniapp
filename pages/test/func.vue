@@ -19,10 +19,14 @@ export default {
       // this.testFunc4();
       // this.testFunc5();
       // this.testFunc6();
-      this.testFunc7()
+      // this.testFunc7()
+      this.testFunc8();
+    },
+    // 测试简易实例
+    testFunc8() {
     },
     // 深入理解普通方法 -> 类的模拟：this和prototype发挥的神奇作用
-    testFunc7(){
+    testFunc7() {
       const Func = function() {
         // js方法中的this指向当前这个对象，
         // 故添加到this上的属性和方法，在new实例时都会被重新复制
@@ -36,6 +40,7 @@ export default {
       let func = new Func();
       func.add();
       // 扩展:如何理解constructor属性
+      // 一切皆对象[按顺序描述]：对象定义时 --->【构造函数】【显示原型】,实例化时--->【隐式原型】
       // 理解：创建一个A对象时，都会同时创建一个“B原型对象”，并将A对象的prototype属性指向该B原型对象
       // 创建的B原型对象总是会包含一个constructor属性，该属性总是指回A对象
       // 如此一来：prototype和constructor就在AB两个孪生对象之间形成了闭环
@@ -47,6 +52,9 @@ export default {
       // 两件事情：让func._proto指向A.prototype，让func.constructor指向A本身，这是个一对二的V字形
       // 好玩：定义Func对象时，是个闭环，实例化func时，是个V字形,非闭环
       // 虽然this和prototype通过不同的原理都实现了继承，但是是否绑定this,是否覆盖prototype，都会体现在实例属性权限上，私有或者公有等问题上。
+      // 继承：在父类构造函数中，则会被复制执行一遍。若在原型对象中，会被所有实例化对象共用。
+      // function视为类这种继承方式有很多，探究也很复杂，最完美的方式实用性差，已经不用纠结了。
+      // 最简单且实用的当属“构造函数继承”，即属性和方法都放在构造函数中，规避prototype，在子类构造中用superClass.call(this, id);
       // 更详细理解参考：https://zhuxiaobotongxue.github.io/2019/06/15/prototype/
     },
     // js对象分类："内部对象Function,Array","宿主对象:Window,Document","自定义对象"
@@ -181,6 +189,9 @@ export default {
     }
   },
   mounted() {
+    // 很重要的两句话：
+    //  js中一切皆对象
+    //  js中函数式第一等公民
     this.testFunc();
   }
 };
