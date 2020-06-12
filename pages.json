@@ -82,6 +82,11 @@
     "style": {
       "navigationBarTitleText": "高阶函数"
     }
+  }, {
+    "path": "pages/test/design",
+    "style": {
+      "navigationBarTitleText": "设计模式"
+    }
   }],
   "tabBar": {
     "borderStyle": "black",

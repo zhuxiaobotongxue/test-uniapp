@@ -6,6 +6,7 @@
     <button @click="routerUtil.navigateTo({ url: '/pages/test/func' })">高阶函数</button>
     <button @click="routerUtil.navigateTo({ url: '/pages/test/ramda' })">函数式</button>
     <button @click="routerUtil.navigateTo({ url: '/pages/test/http' })">请求</button>
+    <button @click="routerUtil.navigateTo({ url: '/pages/test/design' })">设计模式</button>
     <button @click="routerUtil.goWebview({ url: 'http://www.baidu.com', title: '百度一下' })">webview</button>
     <button @click="routerUtil.navigateTo({ url: '/pages/test/temp' })">临时测试</button>
   </view>
