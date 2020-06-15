@@ -61,11 +61,9 @@
 import { mapGetters, mapActions } from 'vuex';
 import { AppConf } from '@/config';
 import { APP_CONST } from '@/constants';
-import { pushMsg } from '@/apis';
-import { tool } from '@/utils'
-import form from '@/mixins/form';
+import { userApis } from '@/apis';
+import { tool } from '@/utils';
 export default {
-  mixins: [form],
   data() {
     return {
       auth: {
@@ -103,12 +101,18 @@ export default {
     toggleOpType() {
       this.auth.opType = this.auth.opType === this.AUTH_MODES.ACCOUNT ? this.AUTH_MODES.CAPTCHA : this.AUTH_MODES.ACCOUNT;
     },
-    /**
-     * @function 验证表单
-     * @description 若不复写该方法，默认验证通过
-     */
-    verify() {
-      const { account, captcha } = this.auth;
+    onSubmit() {
+      tool.handleSubmit({
+        formInfo: this.auth,
+        verify: this.verify,
+        adapt: this.adapt,
+        submit: this.submit,
+        dealResult: this.dealResult
+      });
+    },
+    // 验证表单
+    verify(formInfo) {
+      const { account, captcha } = formInfo;
       let verifyObj = {
         ACCOUNT: () => {
           if (!this.$validator.isMobilePhone(account.name, 'zh-CN')) {
@@ -145,16 +149,13 @@ export default {
         }
       };
       verifyObj.FORGET = verifyObj.REGIST;
-      // 执行
+
       verifyObj[this.auth.opType]();
     },
-    /**
-     * @function 数据适配
-     * @description 若不复写该方法，默认返回空对象
-     */
-    reorganize() {
-      const { account, captcha } = this.auth;
-      let reorganizeObj = {
+    // 数据适配
+    adapt(formInfo) {
+      const { account, captcha } = formInfo;
+      let adaptObj = {
         ACCOUNT: () => {
           return {
             name: account.name,
@@ -176,30 +177,27 @@ export default {
           };
         }
       };
-      reorganizeObj.FORGET = reorganizeObj.REGIST;
-      // 执行
-      return reorganizeObj[this.auth.opType]();
+      adaptObj.FORGET = adaptObj.REGIST;
+
+      return adaptObj[this.auth.opType]();
     },
-    /**
-     * @function 提交
-     * @param {obj} info 经适配后的提交数据
-     * @description 该方法必须复写，处理提交业务
-     */
-    handleSubmit(info) {
+    // 提交
+    async submit(formInfo) {
       let submitObj = {
         ACCOUNT: async () => {
-          return await this.signin({ type: this.auth.opType, ...info });
+          let { data: res } = await userApis.signinByPwd(formInfo);
+          return await this.signin({ token: res.token, userInfo: res.userInfo });
+        },
+        CAPTCHA: async () => {
+          let { data: res } = await userApis.signinByCode(formInfo);
+          return await this.signin({ token: res.token, userInfo: res.userInfo });
         }
       };
-      submitObj.CAPTCHA = submitObj.ACCOUNT;
       return submitObj[this.auth.opType]();
     },
-    /**
-     * @function 提交之后
-     * @description 该方法初步处理返回结果，主要控制异常逻辑，也可以复写
-     */
-    submitAfter(res) {
-      tool.routerUtil.goHomePage()
+    // 处理结果
+    dealResult(res) {
+      tool.routerUtil.goHomePage();
     }
   }
 };

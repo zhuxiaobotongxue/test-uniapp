@@ -1,34 +1,56 @@
 <template>
   <view class="container">
-    <text>测试表单mixin</text>
+    <text>测试表单</text>
     <button @click="onSubmit">提交</button>
   </view>
 </template>
 
 <script>
-import form from '@/mixins/form';
 import { testApis } from '@/apis';
+import { tool } from '@/utils';
 export default {
-  mixins: [form],
-  data() {
-    return {
-      formInfo: {
-        section1: {
-          name: 'xxx',
-          tel: '15991856228'
-        }
-      }
-    };
-  },
+  // data() {
+  //   return {
+  //     formInfo: {
+  //       section1: {
+  //         name: 'xxx',
+  //         tel: '15991856228'
+  //       }
+  //     }
+  //   };
+  // },
   methods: {
-    /**
-     * @function 提交
-     * @param {obj} info 经适配后的提交数据
-     * @description 该方法必须复写，处理提交业务
-     */
-    async handleSubmit(info) {
-      return await testApis.loadMockList(info);
+    onSubmit() {
+      tool.handleSubmit({
+        // formInfo: this.formInfo,
+        // verify: this.verify,
+        // adapt: this.adapt,
+        submit: this.submit
+        // dealResult: this.dealResult
+      });
+    },
+    async submit(formInfo) {
+      return await testApis.loadMockList(formInfo);
     }
+    // verify(formInfo) {
+    //   const { section1 } = formInfo;
+    //   if (!section1.name || !section1.name.trim()) {
+    //     throw '姓名不能为空!';
+    //   }
+    //   if (!this.$validator.isMobilePhone(section1.tel, 'zh-CN')) {
+    //     throw '手机号码不符合规范!';
+    //   }
+    // },
+    // adapt(formInfo) {
+    //   const { section1 } = formInfo;
+    //   return {
+    //     name: section1.name,
+    //     tel: section1.tel
+    //   };
+    // },
+    // dealResult(res) {
+    //   console.color(res);
+    // }
   }
 };
 </script>

@@ -6,18 +6,21 @@
 import { EnvDiffInH5 } from '@/libs/interface';
 import { AppConf } from '@/config';
 import { tool } from '@/utils';
+import { userApis } from '@/apis';
+import { mapActions } from 'vuex';
 export default {
   methods: {
+    ...mapActions(['signin']),
     // 初始化
     init() {
       try {
-        this.signin();
+        this.login();
       } catch (err) {
         this.$showErr(err);
       }
     },
     // 登录
-    signin() {
+    login() {
       // #ifdef H5
       this.signinInH5();
       // #endif
@@ -30,8 +33,11 @@ export default {
       tool.routerUtil.goAuthPage();
     },
     // 钉钉免登录
-    signinByDd({ code }) {
+    async signinByDd({ code }) {
       if (code) {
+        // let res = await userApis.dingCodeLogin(code);
+        let res = { token: '123', userInfo: { name: '小明', tel: 15991856228 } };
+        await this.signin({ token: res.token, userInfo: res.userInfo });
         tool.routerUtil.goHomePage();
       } else {
         this.$showErr('未提供授权码');

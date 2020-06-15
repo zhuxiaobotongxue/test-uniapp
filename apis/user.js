@@ -42,3 +42,16 @@ export const signinByCode = ({
     })
   })
 }
+/**
+ * 钉钉code授权登录--用于移动端
+ */
+export const dingCodeLogin = code => {
+  return httpRequest.request({
+    noAuth: true,
+    url: '/ding/authorization/dingCodeLogin',
+    method: 'GET',
+    params: {
+      code
+    }
+  })
+}

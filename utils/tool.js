@@ -39,16 +39,16 @@ export const routerUtil = {
   goHomePage(params = {}) {
     let url = urlAndParams('/pages/home/index', params)
     uni.switchTab({
-    	url
+      url
     })
   },
-	goAuthPage(callback, params = {}) {
-		let url = urlAndParams('/pages/account/signin', params)
-		uni.reLaunch({
-			url,
-			success: callback
-		})
-	},
+  goAuthPage(callback, params = {}) {
+    let url = urlAndParams('/pages/account/signin', params)
+    uni.reLaunch({
+      url,
+      success: callback
+    })
+  },
   navigateTo({
     url,
     params = {}
@@ -71,5 +71,31 @@ export const routerUtil = {
     uni.navigateTo({
       url: `/pages/webview/web?${_paramStr}`
     })
+  }
+}
+/**
+ * @function 封装表单
+ */
+export const handleSubmit = async ({
+  formInfo = {},
+  verify,
+  adapt,
+  submit,
+  dealResult
+}) => {
+  try {
+    if (verify) {
+      verify(formInfo);
+    }
+    if (submit) {
+      const res = await submit(adapt ? adapt(formInfo) : formInfo);
+      if (dealResult) {
+        dealResult(res);
+      }
+    } else {
+      throw 'submit回调方法必须提供！';
+    }
+  } catch (err) {
+    this.$showErr(err);
   }
 }

@@ -117,7 +117,7 @@ export default {
       text-align: center;
       max-width: 100%;
       /* #ifdef H5 */
-      margin-top: -84rpx;
+      margin-top: -70rpx;
       /* #endif */
       /* #ifndef H5 */
       position: absolute;
