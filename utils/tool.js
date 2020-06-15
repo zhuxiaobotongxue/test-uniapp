@@ -96,6 +96,10 @@ export const handleSubmit = async ({
       throw 'submit回调方法必须提供！';
     }
   } catch (err) {
-    this.$showErr(err);
+    uni.showToast({
+      icon: 'none',
+      title: typeof err === 'string' ? err : JSON.stringify(err),
+      duration: 2500
+    });
   }
 }
