@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import qs from '@/libs/query-string'
+import qs from 'query-string'
 
 export const objDecode = params => {
   let _params = {}

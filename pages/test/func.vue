@@ -24,6 +24,14 @@ export default {
     },
     // 测试简易实例
     testFunc8() {
+      function Test() {
+        (this.aa = '11'),
+          (this.showAA = function() {
+            console.log(this.aa);
+          });
+      }
+      let test = new Test();
+      console.log(test.showAA());
     },
     // 深入理解普通方法 -> 类的模拟：this和prototype发挥的神奇作用
     testFunc7() {
@@ -49,15 +57,20 @@ export default {
       // js中一切皆对象，A是对象，A.prototype即B也是对象，他们都有_proto属性(隐式原型),
       // 有意思的是B对象即A.prototype对象的隐式原型_proto_会直接指向它上一级的隐式原型
       // 总上所述：实例化func时发生了什么呢？
-      // 两件事情：让func._proto指向A.prototype，让func.constructor指向A本身，这是个一对二的V字形
+      // 两件事情：让func._proto_指向A.prototype，让func.constructor指向A本身，这是个一对二的V字形
       // 好玩：定义Func对象时，是个闭环，实例化func时，是个V字形,非闭环
       // 虽然this和prototype通过不同的原理都实现了继承，但是是否绑定this,是否覆盖prototype，都会体现在实例属性权限上，私有或者公有等问题上。
       // 继承：在父类构造函数中，则会被复制执行一遍。若在原型对象中，会被所有实例化对象共用。
       // function视为类这种继承方式有很多，探究也很复杂，最完美的方式实用性差，已经不用纠结了。
       // 最简单且实用的当属“构造函数继承”，即属性和方法都放在构造函数中，规避prototype，在子类构造中用superClass.call(this, id);
+      // 理解这几个过程发生了什么？new即复制构造函数，_proto_引用父类prototype、SuperClass.call(this, m)即只在子类环境中执行父类的构造函数
+      // 理解技巧：脑海中始终用闭环和V字形组合成一个金三模型，当发生一个new实例化事件，脑海中立刻构建上下层级新的金三角模型，这样就能理清其中的逻辑。
+      // 继承是类之间的关系，而new是实例与类之间的关系，但js在模拟继承时都用到了new.
+      // 疑问：既然通过prototype继承的内容是共享的，那么多个实例化的对象同时使用prototype继承来的东西不会相互影响吗？
+      // 回答：通常通过prototype继承来的只是方法，没有属性，而这些方法被实例调用作用的属性其实是子类自己的，故不会相互影响，若操作的确实是继承自prototype的公共属性，那么当然会相互影响。
       // 更详细理解参考：https://zhuxiaobotongxue.github.io/2019/06/15/prototype/
     },
-    // js对象分类："内部对象Function,Array","宿主对象:Window,Document","自定义对象"
+    // js对象分类："宿主对象:Window,Document,Console","内部对象Function,Array","自定义对象"
     // 不能在内部对象上挂载很多自定义方法 ---> 替代方案 ---> 在其原型上绑定一个添加方法的方法addMethod
     // 效果：内部对象的实例或自定义类就可以通过addMethod方法，为其自身扩展方法，且很方便地实现 链式调用
     testFunc6() {
