@@ -26,8 +26,11 @@ ColorUI样式库，同时可在common.scss中自定义扩展
 HBuilder X(2.6.16)、(阿里)小程序开发工具 (1.12.15)、微信开发者工具
 ## 参考jsAPI
 [uniapp](https://uniapp.dcloud.io/api/README)
-[H5+](http://www.html5plus.org/doc/h5p.html)
 [钉钉开发文档](https://ding-doc.dingtalk.com/doc#/dev/welcome-to-lark)
+[H5+](http://www.html5plus.org/doc/h5p.html)
 ## 钉钉微应用移动端调试内网穿透
 应用首页地址：http://jhzl.vaiwan.com?showmenu=false
 内网穿透命令：./ding -config=./ding.cfg -subdomain=jhzl 8082
+部署上线后，意味着修改了应用首页地址，就无法内网穿透，给开发和调试带来困难。
+解决方案：在同组织下分别为每个前端开发者创建测试项目，仅对应开发者自己可见，并配置内网穿透[eg：cs_zxb.vaiwan.com]。
+         开发环境代码运行后，启动内网穿透映射至该测试项目，即可正常开发和测试
