@@ -9,15 +9,6 @@
 import { EnvDiffInH5 } from '@/libs/interface';
 export default {
   mounted() {
-    dd.chooseImage({
-      count: 2,
-      success: (res) => {
-          dd.alert({ 
-              title: '选中的图片',
-              content: JSON.stringify(res.filePaths)
-          })
-      },
-    });
   }
 };
 </script>
