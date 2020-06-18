@@ -55,7 +55,7 @@
       }
     }
   }, {
-    "path": "pages/webview/mp-view",
+    "path": "pages/webview/index",
     "style": {
       "navigationBarTitleText": "",
       "app-plus": {
@@ -65,7 +65,10 @@
   }, {
     "path": "pages/user/index",
     "style": {
-      "navigationBarTitleText": "我的"
+      "navigationBarTitleText": "我的",
+      "app-plus": {
+        "titleNView": false
+      }
     }
   }, {
     "path": "pages/account/signin",
@@ -111,7 +114,9 @@
     // #ifndef MP-ALIPAY
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "uni融合实践",
+    // #ifdef H5
     "navigationStyle": "custom",
+    // #endif
     "navigationBarBackgroundColor": "#F8F8F8",
     "backgroundColor": "#F8F8F8"
     // #endif

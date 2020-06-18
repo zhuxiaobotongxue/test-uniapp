@@ -1,0 +1,11 @@
+# https://editorconfig.org
+
+root = true
+
+[*]
+charset = utf-8
+indent_style = space              # 空格缩进
+indent_size = 2                   # 缩进空格为2个
+end_of_line = lf                  # 文件换行符是 linux 的 `\n`
+trim_trailing_whitespace = true   # 不保留行末的空格
+insert_final_newline = true       # 文件末尾添加一个空行

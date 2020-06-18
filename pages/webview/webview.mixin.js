@@ -4,33 +4,6 @@ import {
 import Config from '@/config/index.js'
 
 export default {
-  onLoad(options) {
-    /** 接收参数 */
-    const {
-      title,
-      url,
-      navbarTheme
-    } = this.getRouteParams(options)
-    console.log(navbarTheme, 'navbarTheme')
-    this.title = title
-    this.createWebView ? this.createWebView(url) : this.url = url
-    if (navbarTheme) {
-      this.navbarTheme = navbarThemes[navbarTheme]
-    }
-  },
-  data() {
-    return {
-      wv: null,
-      title: '',
-      url: '',
-      navbarTheme: {}
-    }
-  },
-  computed: {
-    navbarIconColor() {
-      return this.navbarTheme.color ? this.navbarTheme.color : '#333333'
-    },
-  },
   methods: {
     setWebviewStyle() {
       const {
@@ -41,7 +14,7 @@ export default {
       this.wv.setStyle({
         errorPage: '/hybrid/html/error.html',
         replacewebapi: 'auto',
-        plusrequire: 'none',
+        // plusrequire: 'none',
         progress: {
           color: '#007aff'
         },
@@ -67,7 +40,6 @@ export default {
     },
     // 获取参数
     getRouteParams(options) {
-      console.log(tool.objDecode(options), 'objDecode(options)')
       const {
         url,
         title,

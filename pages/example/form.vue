@@ -1,7 +1,10 @@
 <template>
   <view class="container">
     <text>测试表单</text>
-    <button @click="onSubmit">提交</button>
+    <view class="margin flex flex-direction"><button class="cu-btn line-blue lg block" @click="onSubmit">普通提交</button></view>
+    <view class="margin flex flex-direction">
+      <button class="cu-btn line-blue lg block" :disabled="formBtn.isDisabled" @click="onSafeSubmit">{{ formBtn.text }}</button>
+    </view>
   </view>
 </template>
 
@@ -9,29 +12,52 @@
 import { testApis } from '@/apis';
 import { tool } from '@/utils';
 export default {
-  // data() {
-  //   return {
-  //     formInfo: {
-  //       section1: {
-  //         name: 'xxx',
-  //         tel: '15991856228'
-  //       }
-  //     }
-  //   };
-  // },
+  data() {
+    return {
+      formInfo: {
+        section1: {
+          name: 'xxx',
+          tel: '15991856228'
+        }
+      },
+      formBtn: {
+        text: '安全提交',
+        isDisabled: false
+      }
+    };
+  },
   methods: {
+    // 安全提交：应用装饰者模式对普通提交进一步包装
+    async onSafeSubmit() {
+      this.formBtn = {
+        text: '正在提交',
+        isDisabled: true
+      };
+      await tool.handleSubmit({
+        // formInfo: this.formInfo,
+        // verify: this.verify,
+        // adapt: this.adapt,
+        submit: this.submit,
+        dealResult: this.dealResult
+      });
+      this.formBtn = {
+        text: '安全提交',
+        isDisabled: false
+      };
+    },
+    // 普通提交
     onSubmit() {
       tool.handleSubmit({
         // formInfo: this.formInfo,
         // verify: this.verify,
         // adapt: this.adapt,
-        submit: this.submit
-        // dealResult: this.dealResult
+        submit: this.submit,
+        dealResult: this.dealResult
       });
     },
     async submit(formInfo) {
       return await testApis.loadMockList(formInfo);
-    }
+    },
     // verify(formInfo) {
     //   const { section1 } = formInfo;
     //   if (!section1.name || !section1.name.trim()) {
@@ -48,9 +74,9 @@ export default {
     //     tel: section1.tel
     //   };
     // },
-    // dealResult(res) {
-    //   console.color(res);
-    // }
+    dealResult(res) {
+      console.color(res);
+    }
   }
 };
 </script>

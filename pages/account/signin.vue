@@ -34,8 +34,8 @@
         </view>
       </template>
       <view class="margin flex flex-direction">
-        <button class="cu-btn bg-blue margin-tb-sm lg" @click="onSubmit">
-          {{ auth.opType === AUTH_MODES.REGIST ? '注册' : auth.opType === AUTH_MODES.FORGET ? '修改' : '登录' }}
+        <button class="cu-btn bg-blue margin-tb-sm lg" :disabled="formBtn.isDisabled" @click="onSafeSubmit">
+          {{ auth.opType === AUTH_MODES.REGIST ? '注册' : auth.opType === AUTH_MODES.FORGET ? '修改' : formBtn.text }}
         </button>
       </view>
     </form>
@@ -46,181 +46,228 @@
     </template>
     <template>
       <view class="margin flex justify-between">
-        <button v-if="AuthConf.Regist && auth.opType === AUTH_MODES.ACCOUNT" plain size="mini" class="toggle-btn" @click="auth.opType = AUTH_MODES.REGIST">注册</button>
-        <button v-if="AuthConf.Forget && auth.opType === AUTH_MODES.ACCOUNT" plain size="mini" class="toggle-btn" @click="auth.opType = AUTH_MODES.FORGET">忘记密码?</button>
+        <button v-if="AuthConf.Regist && auth.opType === AUTH_MODES.ACCOUNT" plain size="mini" class="toggle-btn"
+          @click="auth.opType = AUTH_MODES.REGIST">注册</button>
+        <button v-if="AuthConf.Forget && auth.opType === AUTH_MODES.ACCOUNT" plain size="mini" class="toggle-btn"
+          @click="auth.opType = AUTH_MODES.FORGET">忘记密码?</button>
       </view>
-      <view v-if="(AuthConf.Regist || AuthConf.Forget) && [AUTH_MODES.REGIST, AUTH_MODES.FORGET].includes(auth.opType)" class="margin flex flex-direction">
+      <view v-if="(AuthConf.Regist || AuthConf.Forget) && [AUTH_MODES.REGIST, AUTH_MODES.FORGET].includes(auth.opType)"
+        class="margin flex flex-direction">
         <button plain size="mini" class="toggle-btn" @click="auth.opType = AUTH_MODES.ACCOUNT">直接登录</button>
       </view>
     </template>
     <view class="copy-right">© 陕西未来数据</view>
   </view>
 </template>
-
 <script>
-import { mapGetters, mapActions } from 'vuex';
-import { AppConf } from '@/config';
-import { APP_CONST } from '@/constants';
-import { userApis } from '@/apis';
-import { tool } from '@/utils';
-export default {
-  data() {
-    return {
-      auth: {
-        opType: '', // 功能类型控制器
-        // 账号密码
-        account: {
-          name: '',
-          pwd: ''
+  import {
+    mapGetters,
+    mapActions
+  } from 'vuex';
+  import {
+    AppConf
+  } from '@/config';
+  import {
+    APP_CONST
+  } from '@/constants';
+  import {
+    userApis
+  } from '@/apis';
+  import {
+    tool
+  } from '@/utils';
+  export default {
+    data() {
+      const account = process.env.NODE_ENV === 'development' ? {
+        name: '15991856228',
+        pwd: '123456'
+      } : {
+        name: '',
+        pwd: ''
+      };
+      return {
+        formBtn: {
+          text: '登录',
+          isDisabled: false
         },
-        // 短信验证码、注册、忘记密码
-        captcha: {
-          tel: '',
-          code: '',
-          pwd: '',
-          rePwd: ''
+        auth: {
+          opType: '', // 功能类型控制器
+          // 账号密码
+          account,
+          // 短信验证码、注册、忘记密码
+          captcha: {
+            tel: '',
+            code: '',
+            pwd: '',
+            rePwd: ''
+          }
         }
+      };
+    },
+    computed: {
+      AUTH_MODES: () => APP_CONST.AUTH_MODES,
+      AuthConf: () => AppConf.Auth
+    },
+    created() {
+      this.init();
+    },
+    methods: { ...mapActions(['regist', 'signin']),
+      // 初始化:默认账号密码方式登录，若它主动配置了false,则检查验证码登录方式
+      init() {
+        if (this.AuthConf.Account) {
+          this.auth.opType = this.AUTH_MODES.ACCOUNT;
+        } else if (this.AuthConf.Captcha) {
+          this.auth.opType = this.AUTH_MODES.CAPTCHA;
+        }
+      },
+      // 切换登录方式:密码和验证码相互切换
+      toggleOpType() {
+        this.auth.opType = this.auth.opType === this.AUTH_MODES.ACCOUNT ? this.AUTH_MODES.CAPTCHA : this.AUTH_MODES.ACCOUNT;
+      },
+      async onSafeSubmit() {
+        this.formBtn = {
+          text: '登录中...',
+          isDisabled: true
+        };
+        await tool.handleSubmit({
+          formInfo: this.auth,
+          verify: this.verify,
+          adapt: this.adapt,
+          submit: this.submit,
+          dealResult: this.dealResult
+        });
+        this.formBtn = {
+          text: '登录',
+          isDisabled: false
+        };
+      },
+      // 验证表单
+      verify(formInfo) {
+        const {
+          account,
+          captcha
+        } = formInfo;
+        let verifyObj = {
+          ACCOUNT: () => {
+            if (!this.$validator.isMobilePhone(account.name, 'zh-CN')) {
+              throw '手机号码不符合规范!';
+            }
+            if (!account.pwd || !account.pwd.trim()) {
+              throw '密码不能为空!';
+            }
+          },
+          CAPTCHA: () => {
+            if (!this.$validator.isMobilePhone(captcha.tel, 'zh-CN')) {
+              throw '手机号码不符合规范!';
+            }
+            if (!captcha.code || !captcha.code.trim()) {
+              throw '验证码不能为空!';
+            }
+          },
+          REGIST: () => {
+            if (!this.$validator.isMobilePhone(captcha.tel, 'zh-CN')) {
+              throw '手机号码不符合规范!';
+            }
+            if (!captcha.code || !captcha.code.trim()) {
+              throw '验证码不能为空!';
+            }
+            if (!captcha.pwd || !captcha.pwd.trim()) {
+              throw '新密码不能为空!';
+            }
+            if (!captcha.rePwd || !captcha.rePwd.trim()) {
+              throw '重复密码不能为空!';
+            }
+            if (captcha.pwd !== captcha.rePwd) {
+              throw '两次密码输入不一致!';
+            }
+          }
+        };
+        verifyObj.FORGET = verifyObj.REGIST;
+        verifyObj[this.auth.opType]();
+      },
+      // 数据适配
+      adapt(formInfo) {
+        const {
+          account,
+          captcha
+        } = formInfo;
+        let adaptObj = {
+          ACCOUNT: () => {
+            return {
+              name: account.name,
+              pwd: account.pwd
+            };
+          },
+          CAPTCHA: () => {
+            return {
+              tel: captcha.tel,
+              code: captcha.code
+            };
+          },
+          REGIST: () => {
+            return {
+              tel: captcha.tel,
+              code: captcha.code,
+              pwd: captcha.pwd,
+              rePwd: captcha.rePwd
+            };
+          }
+        };
+        adaptObj.FORGET = adaptObj.REGIST;
+        return adaptObj[this.auth.opType]();
+      },
+      // 提交
+      async submit(formInfo) {
+        let submitObj = {
+          ACCOUNT: async () => {
+            let {
+              data: res
+            } = await userApis.signinByPwd(formInfo);
+            return await this.signin({
+              token: res.token,
+              userInfo: res.userInfo
+            });
+          },
+          CAPTCHA: async () => {
+            let {
+              data: res
+            } = await userApis.signinByCode(formInfo);
+            return await this.signin({
+              token: res.token,
+              userInfo: res.userInfo
+            });
+          }
+        };
+        return submitObj[this.auth.opType]();
+      },
+      // 处理结果
+      dealResult(res) {
+        tool.routerUtil.goHomePage();
       }
-    };
-  },
-  computed: { AUTH_MODES: () => APP_CONST.AUTH_MODES, AuthConf: () => AppConf.Auth },
-  created() {
-    this.init();
-  },
-  methods: {
-    ...mapActions(['regist', 'signin']),
-    // 初始化:默认账号密码方式登录，若它主动配置了false,则检查验证码登录方式
-    init() {
-      if (this.AuthConf.Account) {
-        this.auth.opType = this.AUTH_MODES.ACCOUNT;
-      } else if (this.AuthConf.Captcha) {
-        this.auth.opType = this.AUTH_MODES.CAPTCHA;
-      }
-    },
-    // 切换登录方式:密码和验证码相互切换
-    toggleOpType() {
-      this.auth.opType = this.auth.opType === this.AUTH_MODES.ACCOUNT ? this.AUTH_MODES.CAPTCHA : this.AUTH_MODES.ACCOUNT;
-    },
-    onSubmit() {
-      tool.handleSubmit({
-        formInfo: this.auth,
-        verify: this.verify,
-        adapt: this.adapt,
-        submit: this.submit,
-        dealResult: this.dealResult
-      });
-    },
-    // 验证表单
-    verify(formInfo) {
-      const { account, captcha } = formInfo;
-      let verifyObj = {
-        ACCOUNT: () => {
-          if (!this.$validator.isMobilePhone(account.name, 'zh-CN')) {
-            throw '手机号码不符合规范!';
-          }
-          if (!account.pwd || !account.pwd.trim()) {
-            throw '密码不能为空!';
-          }
-        },
-        CAPTCHA: () => {
-          if (!this.$validator.isMobilePhone(captcha.tel, 'zh-CN')) {
-            throw '手机号码不符合规范!';
-          }
-          if (!captcha.code || !captcha.code.trim()) {
-            throw '验证码不能为空!';
-          }
-        },
-        REGIST: () => {
-          if (!this.$validator.isMobilePhone(captcha.tel, 'zh-CN')) {
-            throw '手机号码不符合规范!';
-          }
-          if (!captcha.code || !captcha.code.trim()) {
-            throw '验证码不能为空!';
-          }
-          if (!captcha.pwd || !captcha.pwd.trim()) {
-            throw '新密码不能为空!';
-          }
-          if (!captcha.rePwd || !captcha.rePwd.trim()) {
-            throw '重复密码不能为空!';
-          }
-          if (captcha.pwd !== captcha.rePwd) {
-            throw '两次密码输入不一致!';
-          }
-        }
-      };
-      verifyObj.FORGET = verifyObj.REGIST;
+    }
+  };
+</script>
+<style lang="scss" scoped>
+  .container {
+    height: 100vh;
+    background-color: $uni-bg-color-grey;
 
-      verifyObj[this.auth.opType]();
-    },
-    // 数据适配
-    adapt(formInfo) {
-      const { account, captcha } = formInfo;
-      let adaptObj = {
-        ACCOUNT: () => {
-          return {
-            name: account.name,
-            pwd: account.pwd
-          };
-        },
-        CAPTCHA: () => {
-          return {
-            tel: captcha.tel,
-            code: captcha.code
-          };
-        },
-        REGIST: () => {
-          return {
-            tel: captcha.tel,
-            code: captcha.code,
-            pwd: captcha.pwd,
-            rePwd: captcha.rePwd
-          };
-        }
-      };
-      adaptObj.FORGET = adaptObj.REGIST;
+    .cu-form-group .title {
+      min-width: calc(4em + 30rpx);
+    }
 
-      return adaptObj[this.auth.opType]();
-    },
-    // 提交
-    async submit(formInfo) {
-      let submitObj = {
-        ACCOUNT: async () => {
-          let { data: res } = await userApis.signinByPwd(formInfo);
-          return await this.signin({ token: res.token, userInfo: res.userInfo });
-        },
-        CAPTCHA: async () => {
-          let { data: res } = await userApis.signinByCode(formInfo);
-          return await this.signin({ token: res.token, userInfo: res.userInfo });
-        }
-      };
-      return submitObj[this.auth.opType]();
-    },
-    // 处理结果
-    dealResult(res) {
-      tool.routerUtil.goHomePage();
+    .toggle-btn {
+      border: none;
+      color: $uni-color-primary;
+    }
+
+    .copy-right {
+      position: absolute;
+      bottom: 20rpx;
+      width: calc(100vw - 100rpx);
+      text-align: center;
+      font-size: $uni-font-size-sm;
+      color: $uni-text-color-grey;
     }
   }
-};
-</script>
-
-<style lang="scss" scoped>
-.container {
-  height: 100vh;
-  background-color: $uni-bg-color-grey;
-  .cu-form-group .title {
-    min-width: calc(4em + 30rpx);
-  }
-  .toggle-btn {
-    border: none;
-    color: $uni-color-primary;
-  }
-  .copy-right {
-    position: absolute;
-    bottom: 20rpx;
-    width: calc(100vw - 100rpx);
-    text-align: center;
-    font-size: $uni-font-size-sm;
-    color: $uni-text-color-grey;
-  }
-}
 </style>

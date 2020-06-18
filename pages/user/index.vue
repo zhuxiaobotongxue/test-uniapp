@@ -22,7 +22,7 @@
         </view>
       </view>
     </view>
-    <view class="margin flex flex-direction" v-if="showSignBtn"><button class="cu-btn round line-blue lg block" @click="handleSignOut">退出登录</button></view>
+    <view class="margin flex flex-direction" v-if="showSignBtn"><button class="cu-btn line-blue lg block" :disabled="false" @click="handleSignOut">退出登录</button></view>
   </view>
 </template>
 
@@ -52,6 +52,7 @@ export default {
   },
   methods: {
     ...mapActions(['signOut']),
+    onTapEditor(){},
     // 判断环境初始化登录按钮
     initSignBtn() {
       const that = this;

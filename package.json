@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "animate.css": "^4.1.0",
+    "@dcloudio/uni-ui": "^1.1.3",
     "dayjs": "^1.8.17",
     "dingtalk-jsapi": "^2.10.3",
     "md5": "^2.2.1",
