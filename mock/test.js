@@ -46,4 +46,13 @@ export const save = {
     message: '提交成功'
   }
 };
-
+/**
+ * @function 提交发送验证码请求
+ */
+export const sms = {
+  code: 200,
+  data: {
+    code: 200,
+    message: '提交成功'
+  }
+};

@@ -34,9 +34,14 @@
                     "<uses-feature android:name=\"android.hardware.camera\"/>",
                     "<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\"/>",
                     "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>"
-                ]
+                ],
+                "abiFilters" : [ "armeabi-v7a", "arm64-v8a" ]
             },
-            "ios" : {},
+            "ios" : {
+                "urlschemewhitelist" : "weixin,alipay",
+                "urltypes" : "common",
+                "UIBackgroundModes" : "location"
+            },
             "sdkConfigs" : {}
         }
     },
@@ -44,7 +49,8 @@
     "h5" : {
         "title" : "H5页面测试",
         "router" : {
-            "mode" : "history"
+            "mode" : "history",
+            "base" : ""
         },
         "devServer" : {
             "port" : 8082,
@@ -55,7 +61,7 @@
                 "enable" : true
             }
         },
-        "domain" : "127.0.0.1"
+        "domain" : "http://5000.gr4acb98.zx02f9e5.xys12345.cn"
     },
     "mp-weixin" : {
         "appid" : "",

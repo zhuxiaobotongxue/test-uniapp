@@ -117,6 +117,11 @@ vuex-persistedstate@^2.7.0:
     deepmerge "^4.2.2"
     shvl "^2.0.0"
 
+weixin-js-sdk@^1.6.0:
+  version "1.6.0"
+  resolved "http://maven.xys12345.cn/repository/wlsj-npm-group/weixin-js-sdk/-/weixin-js-sdk-1.6.0.tgz#ff50484d8118ce1208f11248cf4a1c0831577514"
+  integrity sha1-/1BITYEYzhII8RJIz0ocCDFXdRQ=
+
 zh-uni-request@^1.0.2:
   version "1.0.2"
   resolved "http://maven.xys12345.cn/repository/wlsj-npm-group/zh-uni-request/-/zh-uni-request-1.0.2.tgz#1ad91ed79d0a6a671f1338885889df6f5342d944"

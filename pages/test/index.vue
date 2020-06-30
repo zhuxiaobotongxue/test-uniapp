@@ -8,6 +8,7 @@
     <button @click="routerUtil.navigateTo({ url: '/pages/test/http' })">请求</button>
     <button @click="routerUtil.navigateTo({ url: '/pages/test/design' })">设计模式</button>
     <button @click="routerUtil.goWebview({ url: 'http://www.baidu.com', title: '百度一下' })">webview</button>
+    <button @click="routerUtil.navigateTo({ url: '/pages/test/wxapp' })">微信小程序之vant-weapp</button>
     <button @click="routerUtil.navigateTo({ url: '/pages/test/temp' })">临时测试</button>
   </view>
 </template>

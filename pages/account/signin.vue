@@ -2,58 +2,59 @@
   <view class="container">
     <view class="padding-tb-xl text-center"><text class="text-xl">uni融合实践</text></view>
     <form>
-      <template v-if="[AUTH_MODES.CAPTCHA, AUTH_MODES.REGIST, AUTH_MODES.FORGET].includes(auth.opType)">
+      <template v-if="[AUTH_MODES.CAPTCHA, AUTH_MODES.REGIST, AUTH_MODES.FORGET].includes(formInfo.opType)">
         <view class="cu-form-group">
           <view class="title">手机号码</view>
-          <input placeholder="请输入手机号码" type="number" v-model="auth.captcha.tel" />
+          <input placeholder="请输入手机号码" type="number" v-model="formInfo.captcha.tel" />
+          <button class="cu-btn bg-blue shadow" style="width: 200rpx;" @click="sendCaptcha">{{ formInfo.captcha.time > 0 ? formInfo.captcha.time + '秒' : '发送验证码'}}</button>
         </view>
         <view class="cu-form-group">
           <view class="title">验证码</view>
-          <input placeholder="请输入验证码" type="number" v-model="auth.captcha.code" />
-          <button class="cu-btn bg-green shadow">验证码</button>
+          <input placeholder="请输入验证码" type="number" v-model="formInfo.captcha.code" />
         </view>
       </template>
-      <template v-if="[AUTH_MODES.REGIST, AUTH_MODES.FORGET].includes(auth.opType)">
+      <template v-if="[AUTH_MODES.REGIST, AUTH_MODES.FORGET].includes(formInfo.opType)">
         <view class="cu-form-group">
           <view class="title">新密码</view>
-          <input placeholder="请输入新密码" password v-model="auth.captcha.pwd" />
+          <input placeholder="请输入新密码" password v-model="formInfo.captcha.pwd" />
         </view>
         <view class="cu-form-group">
           <view class="title">重复密码</view>
-          <input placeholder="请输入重复密码" password v-model="auth.captcha.rePwd" />
+          <input placeholder="请输入重复密码" password v-model="formInfo.captcha.rePwd" />
         </view>
       </template>
-      <template v-if="auth.opType === AUTH_MODES.ACCOUNT">
+      <template v-if="formInfo.opType === AUTH_MODES.ACCOUNT">
         <view class="cu-form-group">
           <view class="title">手机号码</view>
-          <input placeholder="请输入手机号码" type="number" v-model="auth.account.name" />
+          <input placeholder="请输入手机号码" type="number" v-model="formInfo.account.name" />
         </view>
         <view class="cu-form-group">
           <view class="title">密码</view>
-          <input placeholder="请输入密码" password v-model="auth.account.pwd" />
+          <input placeholder="请输入密码" password v-model="formInfo.account.pwd" />
         </view>
       </template>
       <view class="margin flex flex-direction">
-        <button class="cu-btn bg-blue margin-tb-sm lg" :disabled="formBtn.isDisabled" @click="onSafeSubmit">
-          {{ auth.opType === AUTH_MODES.REGIST ? '注册' : auth.opType === AUTH_MODES.FORGET ? '修改' : formBtn.text }}
+        <button class="cu-btn bg-blue margin-tb-sm lg" :disabled="formInfo.isBtnDisabled" @click="onSafeSubmit">
+          {{ formInfo.opType === AUTH_MODES.REGIST ? '注册' : formInfo.opType === AUTH_MODES.FORGET ? '修改' : '登录' }}
         </button>
       </view>
     </form>
-    <template v-if="AuthConf.Account && AuthConf.Captcha && [AUTH_MODES.ACCOUNT, AUTH_MODES.CAPTCHA].includes(auth.opType)">
+    <template v-if="AuthConf.Account && AuthConf.Captcha && [AUTH_MODES.ACCOUNT, AUTH_MODES.CAPTCHA].includes(formInfo.opType)">
       <view class="margin flex flex-direction">
-        <button plain size="mini" class="toggle-btn" @click="toggleOpType">{{ auth.opType === AUTH_MODES.CAPTCHA ? '手机号密码' : '短信验证码' }}登录</button>
+        <button plain size="mini" class="toggle-btn" @click="toggleOpType">{{ formInfo.opType === AUTH_MODES.CAPTCHA ? '手机号密码' : '短信验证码' }}登录</button>
       </view>
     </template>
     <template>
       <view class="margin flex justify-between">
-        <button v-if="AuthConf.Regist && auth.opType === AUTH_MODES.ACCOUNT" plain size="mini" class="toggle-btn"
-          @click="auth.opType = AUTH_MODES.REGIST">注册</button>
-        <button v-if="AuthConf.Forget && auth.opType === AUTH_MODES.ACCOUNT" plain size="mini" class="toggle-btn"
-          @click="auth.opType = AUTH_MODES.FORGET">忘记密码?</button>
+        <button v-if="AuthConf.Regist && formInfo.opType === AUTH_MODES.ACCOUNT" plain size="mini" class="toggle-btn"
+          @click="formInfo.opType = AUTH_MODES.REGIST">注册</button>
+        <button v-if="AuthConf.Forget && formInfo.opType === AUTH_MODES.ACCOUNT" plain size="mini" class="toggle-btn"
+          @click="formInfo.opType = AUTH_MODES.FORGET">忘记密码?</button>
       </view>
-      <view v-if="(AuthConf.Regist || AuthConf.Forget) && [AUTH_MODES.REGIST, AUTH_MODES.FORGET].includes(auth.opType)"
+      <!-- 当前操作是注册或忘记密码，配置的有注册或忘记密码，配置的有账号登录或验证码登录 -->
+      <view v-if="[AUTH_MODES.REGIST, AUTH_MODES.FORGET].includes(formInfo.opType) && (AuthConf.Regist || AuthConf.Forget) && (AuthConf.Account || AuthConf.Captcha)"
         class="margin flex flex-direction">
-        <button plain size="mini" class="toggle-btn" @click="auth.opType = AUTH_MODES.ACCOUNT">直接登录</button>
+        <button plain size="mini" class="toggle-btn" @click="formInfo.opType = AUTH_MODES.ACCOUNT">直接登录</button>
       </view>
     </template>
     <view class="copy-right">© 陕西未来数据</view>
@@ -86,11 +87,8 @@
         pwd: ''
       };
       return {
-        formBtn: {
-          text: '登录',
-          isDisabled: false
-        },
-        auth: {
+        formInfo: {
+          isBtnDisabled: false,
           opType: '', // 功能类型控制器
           // 账号密码
           account,
@@ -98,6 +96,7 @@
           captcha: {
             tel: '',
             code: '',
+            time: 0, // 验证码倒计时
             pwd: '',
             rePwd: ''
           }
@@ -112,34 +111,88 @@
       this.init();
     },
     methods: { ...mapActions(['regist', 'signin']),
+      // 验证码结果处理
+      dealResultCaptcha(res) {
+        if (res.code === 200) {
+          this.formInfo.captcha.time = this.AuthConf.CaptchaTime
+          this.calcTime()
+        }
+      },
+      calcTime() {
+        if (this.formInfo.captcha.time > 0) {
+          this.formInfo.captcha.time--
+          this.timer = setTimeout(this.calcTime, 1000)
+        } else {
+          this.timer && clearTimeout(this.timer)
+        }
+      },
+      // 发送验证码
+      async sendCaptcha() {
+        try {
+          if (this.formInfo.captcha.time > 0) return
+          await tool.handleSubmit({
+            formInfo: this.formInfo,
+            verify: this.verifyCaptcha,
+            submit: this.submitCaptcha,
+            dealResult: this.dealResultCaptcha
+          });
+        } catch (err) {
+          this.$showErr(err)
+        }
+      },
+      // 提交发送验证码请求
+      async submitCaptcha(formInfo) {
+        const {
+          captcha
+        } = formInfo
+        return await userApis.sms({
+          mobile: captcha.tel,
+          smsmode: '1'
+        })
+      },
+      // 验证码校验
+      verifyCaptcha(formInfo) {
+        let {
+          captcha
+        } = formInfo
+        if (!this.$validator.isMobilePhone(captcha.tel, 'zh-CN')) {
+          throw '手机号码不符合规范!';
+        }
+      },
       // 初始化:默认账号密码方式登录，若它主动配置了false,则检查验证码登录方式
       init() {
+        this.initOpType()
+      },
+      // 初始化操作类型:根据优先级做判断,越在前，优先级越低，最终仅有一种操作状态生效
+      initOpType() {
+        if (this.AuthConf.Forget) {
+          this.formInfo.opType = this.AUTH_MODES.FORGET;
+        }
+        if (this.AuthConf.Regist) {
+          this.formInfo.opType = this.AUTH_MODES.REGIST
+        }
+        if (this.AuthConf.Captcha) {
+          this.formInfo.opType = this.AUTH_MODES.CAPTCHA;
+        }
         if (this.AuthConf.Account) {
-          this.auth.opType = this.AUTH_MODES.ACCOUNT;
-        } else if (this.AuthConf.Captcha) {
-          this.auth.opType = this.AUTH_MODES.CAPTCHA;
+          this.formInfo.opType = this.AUTH_MODES.ACCOUNT;
         }
       },
       // 切换登录方式:密码和验证码相互切换
       toggleOpType() {
-        this.auth.opType = this.auth.opType === this.AUTH_MODES.ACCOUNT ? this.AUTH_MODES.CAPTCHA : this.AUTH_MODES.ACCOUNT;
+        this.formInfo.opType = this.formInfo.opType === this.AUTH_MODES.ACCOUNT ? this.AUTH_MODES.CAPTCHA : this.AUTH_MODES
+          .ACCOUNT;
       },
       async onSafeSubmit() {
-        this.formBtn = {
-          text: '登录中...',
-          isDisabled: true
-        };
+        this.formInfo.isBtnDisabled = true
         await tool.handleSubmit({
-          formInfo: this.auth,
+          formInfo: this.formInfo,
           verify: this.verify,
           adapt: this.adapt,
           submit: this.submit,
           dealResult: this.dealResult
         });
-        this.formBtn = {
-          text: '登录',
-          isDisabled: false
-        };
+        this.formInfo.isBtnDisabled = false
       },
       // 验证表单
       verify(formInfo) {
@@ -183,7 +236,7 @@
           }
         };
         verifyObj.FORGET = verifyObj.REGIST;
-        verifyObj[this.auth.opType]();
+        verifyObj[this.formInfo.opType]();
       },
       // 数据适配
       adapt(formInfo) {
@@ -214,7 +267,7 @@
           }
         };
         adaptObj.FORGET = adaptObj.REGIST;
-        return adaptObj[this.auth.opType]();
+        return adaptObj[this.formInfo.opType]();
       },
       // 提交
       async submit(formInfo) {
@@ -238,7 +291,7 @@
             });
           }
         };
-        return submitObj[this.auth.opType]();
+        return submitObj[this.formInfo.opType]();
       },
       // 处理结果
       dealResult(res) {
@@ -264,7 +317,7 @@
     .copy-right {
       position: absolute;
       bottom: 20rpx;
-      width: calc(100vw - 100rpx);
+      width: 100%;
       text-align: center;
       font-size: $uni-font-size-sm;
       color: $uni-text-color-grey;

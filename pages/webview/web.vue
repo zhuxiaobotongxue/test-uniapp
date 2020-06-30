@@ -1,6 +1,7 @@
 <template>
   <view class="container">
-    <uni-nav-bar v-bind="navbarTheme" status-bar :fixed="true" :shadow="false" :border="false" :title="title">
+    <!-- navbarTheme -->
+    <uni-nav-bar status-bar :fixed="true" :shadow="false" :border="false" :title="title">
       <block slot="left">
         <uni-icons type="back" size="30" :color="navbarIconColor" @click="onGoBack"></uni-icons>
         <view style="width: 40rpx;"></view>

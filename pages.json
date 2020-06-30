@@ -90,6 +90,15 @@
     "style": {
       "navigationBarTitleText": "设计模式"
     }
+  }, {
+    "path": "pages/test/wxapp",
+    "style": {
+      "navigationBarTitleText": "微信小程序之vant-weapp",
+      "usingComponents": {
+        "van-grid": "/wxcomponents/vant-weapp/grid/index",
+        "van-grid-item": "/wxcomponents/vant-weapp/grid-item/index"
+      }
+    }
   }],
   "tabBar": {
     "borderStyle": "black",

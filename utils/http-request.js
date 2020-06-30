@@ -12,6 +12,12 @@ http.setConfig((config) => {
 })
 // 全局请求拦截器
 http.interceptor.request((config, cancel) => {
+  if (!config.noAuth) {
+    const {
+      token
+    } = store.getters
+    token ? config.header[AppConf.TokenKey] = token : cancel('Token 不存在')
+  }
   return config
 })
 // 全局响应拦截器

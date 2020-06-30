@@ -42,6 +42,19 @@ export const signinByCode = ({
     })
   })
 }
+// 发送短信验证码
+export const sms = ({
+  mobile,
+  smsmode
+}) => httpRequest.request({
+  url: '/api/sms',
+  method: 'POST',
+  noAuth: true,
+  data: {
+    mobile,
+    smsmode
+  }
+});
 /**
  * 钉钉code授权登录--用于移动端
  */

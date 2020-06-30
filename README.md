@@ -3,15 +3,6 @@
 
 # 项目依赖
 项目基于HBuilderX创建的uni-app项目（内置uni-ui的项目模板）
-"dayjs": "^1.8.17", 日期格式化
-"dingtalk-jsapi": "^2.10.3",
-"ramda": "^0.27.0", 实用js工具库
-"validator": "^13.0.0", 表单验证
-"vuex-persistedstate": "^2.7.0",  vuex整合
-"zh-uni-request": "^1.0.2"  局域网请求封装
-"md5": "^2.2.1",
-"query-string": "^6.9.0",
-"animate.css": "^4.1.0",  动画库
 ColorUI样式库，同时可在common.scss中自定义扩展
 开发环境mockjs启用，可以很好的支援开发进度
 
@@ -35,6 +26,9 @@ HBuilder X(2.6.16)、(阿里)小程序开发工具 (1.12.15)、微信开发者�
 解决方案：在同组织下分别为每个前端开发者创建测试项目，仅对应开发者自己可见，并配置内网穿透[eg：cs_zxb.vaiwan.com]。
          开发环境代码运行后，启动内网穿透映射至该测试项目，即可正常开发和测试
 
+# 微信小程序
+引入自定义组件库vant-weapp 1.3.3版本， es6模式
+[vant-weapp](https://youzan.github.io/vant-weapp/#/quickstart)
 <!-- 待处理问题 -->
 1.微信小程序初始化运行关于@dcludo问题
 2.仅有注册问题

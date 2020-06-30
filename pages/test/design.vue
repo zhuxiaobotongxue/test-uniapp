@@ -22,20 +22,24 @@
         // this.testFun12();
         // this.testFun13();
         // 行为型设计模式：用于不同对象之间的交互，重点在交互
-        // this.testFun14()
-        // this.testFun15()
-        // this.testFun16()
-        // this.testFun17()
-        // this.testFun18()
-        // this.testFun19()
-        // this.testFun20()
-        // this.testFun21()
-        // this.testFun22()
-        // this.testFun23()
-        this.testFun24()
+        // this.testFun14() // 模板方法
+        // this.testFun15() // 观察者
+        // this.testFun16() // 状态
+        // this.testFun17() // 策略
+        // this.testFun18() // 职责链
+        // this.testFun19() // 命令模式
+        // this.testFun20() // 访问者
+        // this.testFun21() // 中介者
+        // this.testFun22() // 备忘录
+        // this.testFun23() // 迭代器
+        // this.testFun24() // 解释器
       },
-      // 解释器模式
-      testFun24(){},
+      // 解释器模式:能够根据需求抽象出一套完整的语法规则
+      // eg:要统计从最内层元素到最外层元素之间的路径，BODY>DIV>BUTTON
+      // 解释器对象：提取路径上的每个元素，并拼接在一起，最终得到“BODY>DIV>BUTTON”
+      testFun24(){
+        // 略
+      },
       // 迭代器模式：自定义一个迭代器对象，代替for来遍历类数组，另外自定义迭代器还可以扩展一些实用的方法
       //            如此一来，这个迭代器对象是可以轻松复用且功能可扩展的,优化循环结构的一种方案
       testFun23() {
