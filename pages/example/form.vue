@@ -35,8 +35,8 @@
           // formInfo: this.formInfo,
           // verify: this.verify,
           // adapt: this.adapt,
-          submit: this.submit,
-          dealResult: this.dealResult
+          submit: this.submit
+          // dealResult: this.dealResult
         });
         this.formInfo.isBtnDisabled = false
       },

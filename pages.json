@@ -1,105 +1,109 @@
 {
   "pages": [{
-    "path": "pages/index/index",
-    "style": {
-      "navigationBarTitleText": "uni融合实践"
-    }
-  }, {
-    "path": "pages/home/index",
-    "style": {
-      "navigationBarTitleText": "uni融合实践",
-      "app-plus": {
-        // #ifdef H5
-        "titleNView": false,
-        // #endif
-        "navigationBarTextStyle": "white",
-        "navigationBarBackgroundColor": "#3277FF"
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "uni融合实践"
+      }
+    }, {
+      "path": "pages/home/index",
+      "style": {
+        "navigationBarTitleText": "uni融合实践",
+        "app-plus": {
+          // #ifdef H5
+          "titleNView": false,
+          // #endif
+          "navigationBarTextStyle": "white",
+          "navigationBarBackgroundColor": "#3277FF"
+        }
+      }
+    }, {
+      "path": "pages/test/index",
+      "style": {
+        "navigationBarTitleText": "测试"
+      }
+    }, {
+      "path": "pages/test/dingding",
+      "style": {
+        "navigationBarTitleText": "钉钉"
+      }
+    }, {
+      "path": "pages/example/form",
+      "style": {
+        "navigationBarTitleText": "表单"
+      }
+    }, {
+      "path": "pages/test/test",
+      "style": {
+        "navigationBarTitleText": "通用测试"
+      }
+    }, {
+      "path": "pages/test/ramda",
+      "style": {
+        "navigationBarTitleText": "函数式"
+      }
+    }, {
+      "path": "pages/test/http",
+      "style": {
+        "navigationBarTitleText": "请求"
+      }
+    }, {
+      "path": "pages/webview/web",
+      "style": {
+        "navigationBarTitleText": "",
+        "app-plus": {
+          "titleNView": false
+        }
+      }
+    }, {
+      "path": "pages/webview/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "app-plus": {
+          "titleNView": false
+        }
+      }
+    }, {
+      "path": "pages/user/index",
+      "style": {
+        "navigationBarTitleText": "我的",
+        "app-plus": {
+          "titleNView": false
+        }
+      }
+    }, {
+      "path": "pages/account/signin",
+      "style": {
+        "navigationBarTitleText": "登录"
+      }
+    }, {
+      "path": "pages/test/temp",
+      "style": {
+        "navigationBarTitleText": "临时测试"
+      }
+    }, {
+      "path": "pages/test/func",
+      "style": {
+        "navigationBarTitleText": "高阶函数"
+      }
+    }, {
+      "path": "pages/test/design",
+      "style": {
+        "navigationBarTitleText": "设计模式"
       }
     }
-  }, {
-    "path": "pages/test/index",
-    "style": {
-      "navigationBarTitleText": "测试"
-    }
-  }, {
-    "path": "pages/test/dingding",
-    "style": {
-      "navigationBarTitleText": "钉钉"
-    }
-  }, {
-    "path": "pages/example/form",
-    "style": {
-      "navigationBarTitleText": "表单"
-    }
-  }, {
-    "path": "pages/test/test",
-    "style": {
-      "navigationBarTitleText": "通用测试"
-    }
-  }, {
-    "path": "pages/test/ramda",
-    "style": {
-      "navigationBarTitleText": "函数式"
-    }
-  }, {
-    "path": "pages/test/http",
-    "style": {
-      "navigationBarTitleText": "请求"
-    }
-  }, {
-    "path": "pages/webview/web",
-    "style": {
-      "navigationBarTitleText": "",
-      "app-plus": {
-        "titleNView": false
+    // #ifdef MP-WEIXIN
+    , {
+      "path": "pages/test/wxapp",
+      "style": {
+        "navigationBarTitleText": "微信小程序之vant-weapp",
+        "usingComponents": {
+          "van-grid": "/wxcomponents/vant-weapp/grid/index",
+          "van-grid-item": "/wxcomponents/vant-weapp/grid-item/index"
+        }
       }
     }
-  }, {
-    "path": "pages/webview/index",
-    "style": {
-      "navigationBarTitleText": "",
-      "app-plus": {
-        "titleNView": false
-      }
-    }
-  }, {
-    "path": "pages/user/index",
-    "style": {
-      "navigationBarTitleText": "我的",
-      "app-plus": {
-        "titleNView": false
-      }
-    }
-  }, {
-    "path": "pages/account/signin",
-    "style": {
-      "navigationBarTitleText": "登录"
-    }
-  }, {
-    "path": "pages/test/temp",
-    "style": {
-      "navigationBarTitleText": "临时测试"
-    }
-  }, {
-    "path": "pages/test/func",
-    "style": {
-      "navigationBarTitleText": "高阶函数"
-    }
-  }, {
-    "path": "pages/test/design",
-    "style": {
-      "navigationBarTitleText": "设计模式"
-    }
-  }, {
-    "path": "pages/test/wxapp",
-    "style": {
-      "navigationBarTitleText": "微信小程序之vant-weapp",
-      "usingComponents": {
-        "van-grid": "/wxcomponents/vant-weapp/grid/index",
-        "van-grid-item": "/wxcomponents/vant-weapp/grid-item/index"
-      }
-    }
-  }],
+    // #endif
+  ],
   "tabBar": {
     "borderStyle": "black",
     "backgroundColor": "#FFFFFF",

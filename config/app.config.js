@@ -18,5 +18,6 @@ const Auth = {
 export default {
   // Api 接口 根路径
   BaseUrl,
+  TokenKey: 'X-Access-Token',
   Auth
 }

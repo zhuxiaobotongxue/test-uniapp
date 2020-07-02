@@ -16,6 +16,9 @@ export default {
     SET_USERINFO(state, userInfo) {
       state.userInfo = userInfo
     },
+    UPD_USERINFO(state, params){
+      state.userInfo = Object.assign({}, state.userInfo, params)
+    },
     SET_TOKEN(state, token) {
       state.token = token
     },
@@ -48,6 +51,24 @@ export default {
         // 处理退出逻辑
         commit('CLEAR_SIGNIN_STATUS')
         resolve()
+      })
+    },
+    updateUserInfo({
+      commit
+    }, {
+      field,
+      value
+    }) {
+      return new Promise(async (resolve, reject) => {
+        try {
+          const params = {
+            [field]: value
+          }
+          commit('UPD_USERINFO', params)
+          resolve()
+        } catch (err) {
+          reject(err)
+        }
       })
     },
   }
