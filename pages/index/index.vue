@@ -5,7 +5,7 @@
 <script>
   import {
     EnvDiffInH5
-  } from '@/libs/interface';
+  } from '@/interface';
   import {
     AppConf
   } from '@/config';

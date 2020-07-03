@@ -1,146 +1,133 @@
 <template>
   <view class="container">
-    <image class="bg-img" src="/static/images/signin/bg.jpg" mode="scaleToFill"></image>
-    <view class="cu-card card-box">
-      <view class="cu-item user-card-wrap">
-        <view class="user-card" v-if="userInfo">
-          <image class="cu-avatar round" :src="avatar" mode="scaleToFill" @tap="onTapEditor"></image>
-          <view class="cu-username" @tap="onTapEditor">{{ userInfo.name }}</view>
+    <view class="user">
+      <view class="flex align-center">
+        <view class="flex-sub text-center">
+          <image class="user-avatar" :src="avatar" @click="open()"></image>
         </view>
-      </view>
-      <view class="cu-item">
-        <view class="cu-list menu sm-border">
-          <view class="cu-item arrow" v-for="menu in menuList" :key="menu.id" @click="onTapMenuItem(menu)">
-            <button class="cu-btn content">
-              <text :class="[menu.iconClass, 'text-lg']"></text>
-              <text class="text-grey">{{ menu.label }}</text>
-            </button>
-            <view class="action" v-if="menu.value">
-              <text class="text-grey text-sm">{{ menu.value }}</text>
-            </view>
-          </view>
+        <view class="flex-treble">
+          <text class="text-xl text-black">{{ userInfo.name }}</text>
         </view>
       </view>
     </view>
-    <view class="margin flex flex-direction" v-if="showSignBtn"><button class="cu-btn line-blue lg block" :disabled="false" @click="handleSignOut">退出登录</button></view>
+    <view class="cu-list menu card-menu margin-top-xl margin-bottom-xl shadow-lg">
+      <view v-for="menu in menuList" :key="menu.id" class="cu-item arrow" @click="onTapMenuItem(menu)">
+        <view class="content">
+          <text :class="[menu.iconClass, 'text-lg']"></text>
+          <text class="text-grey">{{ menu.label }}</text>
+        </view>
+        <view class="action" v-if="menu.value">
+          <text class="text-grey text-sm">{{ menu.value }}</text>
+        </view>
+      </view>
+    </view>
+    <view class="margin flex flex-direction" v-if="showSignBtn"><button class="cu-btn line-blue lg block" :disabled="false"
+        @click="handleSignOut">退出登录</button></view>
   </view>
 </template>
 
 <script>
-import { tool } from '@/utils';
-import { mapGetters, mapActions } from 'vuex';
-import { EnvDiffInH5 } from '@/libs/interface';
-export default {
-  data() {
-    return {
-      showSignBtn: true
-    };
-  },
-  computed: {
-    ...mapGetters(['userInfo']),
-    avatar() {
-      return this.userInfo.avatar || require('@/static/images/signin/photo.png');
+  import {
+    tool
+  } from '@/utils';
+  import {
+    mapGetters,
+    mapActions
+  } from 'vuex';
+  import {
+    EnvDiffInH5
+  } from '@/interface';
+  export default {
+    data() {
+      return {
+        showSignBtn: true
+      };
     },
-    menuList() {
-      return [{ id: '1', iconClass: 'cuIcon-safe text-blue', label: '我的测试', url: '/pages/test/index' }];
-    }
-  },
-  mounted() {
-    // #ifdef H5
-    this.initSignBtn();
-    // #endif
-  },
-  methods: {
-    ...mapActions(['signOut']),
-    onTapEditor(){},
-    // 判断环境初始化登录按钮
-    initSignBtn() {
-      const that = this;
-      class IsShowSignBtn extends EnvDiffInH5 {
-        notInDingTalk() {
-          that.showSignBtn = true;
-        }
-        dd() {
-          that.showSignBtn = false;
-        }
+    computed: {
+      ...mapGetters(['userInfo']),
+      avatar() {
+        return this.userInfo.avatar || require('@/static/images/signin/photo.png');
+      },
+      menuList() {
+        return [{
+          id: '9',
+          iconClass: 'cuIcon-safe text-blue',
+          label: '我的测试',
+          url: '/pages/test/index',
+          value: ''
+        }, {
+          id: '10',
+          iconClass: 'cuIcon-safe text-blue',
+          label: '关于',
+          url: '',
+          value: ''
+        }];
       }
-      let isShowSignBtn = new IsShowSignBtn();
-      isShowSignBtn[this.$dd.env.platform]();
     },
-    handleSignOut() {
-      uni.showModal({
-        title: '提示',
-        content: '确定要退出登录吗?',
-        success: ({ confirm }) => {
-          if (confirm) {
-            tool.routerUtil.goAuthPage(() => {
-              this.signOut();
-            });
+    mounted() {
+      // #ifdef H5
+      this.initSignBtn();
+      // #endif
+    },
+    methods: {
+      ...mapActions(['signOut']),
+      onTapEditor() {},
+      // 判断环境初始化登录按钮
+      initSignBtn() {
+        const that = this;
+        class IsShowSignBtn extends EnvDiffInH5 {
+          notInDingTalk() {
+            that.showSignBtn = true;
+          }
+          dd() {
+            that.showSignBtn = false;
           }
         }
-      });
-    },
-    onTapMenuItem(menu) {
-      if (menu.url) {
-        uni.navigateTo({ url: menu.url });
-      } else if (menu.clickHandle) {
-        menu.clickHandle();
+        let isShowSignBtn = new IsShowSignBtn();
+        isShowSignBtn[this.$dd.env.platform]();
+      },
+      handleSignOut() {
+        uni.showModal({
+          title: '提示',
+          content: '确定要退出登录吗?',
+          success: ({
+            confirm
+          }) => {
+            if (confirm) {
+              tool.routerUtil.goAuthPage(() => {
+                this.signOut();
+              });
+            }
+          }
+        });
+      },
+      onTapMenuItem(menu) {
+        if (menu.url) {
+          uni.navigateTo({
+            url: menu.url
+          });
+        } else if (menu.clickHandle) {
+          menu.clickHandle();
+        } else {
+          this.$showErr('开发中...')
+        }
       }
     }
-  }
-};
+  };
 </script>
 
 <style lang="scss">
-.container {
-  .bg-img {
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 30vh;
-    border-bottom-left-radius: 65% 10%;
-    border-bottom-right-radius: 65% 10%;
-  }
-  .card-box {
-    margin-top: -10vh;
-    position: relative;
-    z-index: 10;
-    overflow: visible !important;
-  }
-  .user-card-wrap {
-    min-height: 218rpx;
-    display: flex;
-    justify-content: center;
-    overflow: visible !important;
-    .user-card {
-      border: 1rpx solid transparent;
-      text-align: center;
-      max-width: 100%;
-      /* #ifdef H5 */
-      margin-top: -70rpx;
-      /* #endif */
-      /* #ifndef H5 */
-      position: absolute;
-      margin: auto;
-      left: 0;
-      right: 0;
-      top: -84rpx;
-      /* #endif */
-      .cu-avatar {
-        border: 2px solid $uni-bg-color-grey;
-        margin-bottom: 20rpx;
-        width: 71px;
-        height: 71px;
-      }
-      .cu-username {
-        margin: auto;
-        text-align: center;
-        line-height: 1;
-        font-size: 32rpx;
-        margin-bottom: 20rpx;
+  .container {
+    .user {
+      padding: 50rpx 40rpx;
+      background-color: #FFFFFF;
+
+      &-avatar {
+        width: 130rpx;
+        height: 130rpx;
+        border: 5rpx solid #fff;
+        border-radius: 50%;
       }
     }
   }
-}
 </style>

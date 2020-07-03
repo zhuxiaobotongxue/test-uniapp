@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { EnvDiffInH5 } from '@/libs/interface';
+import { EnvDiffInH5 } from '@/interface';
 export default {
   mounted() {
   }

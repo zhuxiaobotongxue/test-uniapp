@@ -1,6 +1,13 @@
 import dayjs from 'dayjs'
 import qs from 'query-string'
 
+// url 参数拼接(局部方法)
+const urlAndParams = (url, params) => {
+  let _params = qs.stringify(params)
+  let _url = _params ? `${url}?${_params}` : url
+  return _url
+}
+
 export const objDecode = params => {
   let _params = {}
   let objKes = Object.keys(params)
@@ -10,12 +17,7 @@ export const objDecode = params => {
   })
   return _params
 }
-// url 参数拼接
-export const urlAndParams = (url, params) => {
-  let _params = qs.stringify(params)
-  let _url = _params ? `${url}?${_params}` : url
-  return _url
-}
+
 // 日期格式化
 export const parseDate = (date, format = 'YYYY-MM-DD HH:mm:ss') => {
   return dayjs(date).format(format)
@@ -32,7 +34,7 @@ export const colorLog = (...rest) => {
   }
   console.log('%c %s', 'color: #7f8c8d', '----------end----------')
 }
-/** 
+/**
  * @function 封装路由
  */
 export const routerUtil = {

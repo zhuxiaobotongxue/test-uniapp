@@ -6,7 +6,7 @@ import validator from 'validator'
 import Mock from '@/mock'
 import animated from 'animate.css'
 import { tool } from '@/utils'
-import MyPlugin from '@/libs/plugin'
+import MyPlugin from '@/plugin'
 
 console.color = tool.colorLog
 App.mpType = 'app'
