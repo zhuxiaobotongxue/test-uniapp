@@ -16,7 +16,7 @@
         // 结构型设计模式:针对基础对象的小范围扩展和发挥，重点在功能
         // this.testFun7()
         // this.testFun8();
-        // this.testFun9()
+        // this.testFun9(); // 代理模式
         // this.testFun10();
         // this.testFun11();
         // this.testFun12();
@@ -120,8 +120,33 @@
       // 中介者模式，【多对多】强调的是多个"对象"之间的消息，属于双向
       // eg: 系统的设置模块进行设置，在被设置模块做出响应，这个案例就应该是“观察者模式”
       //     qq群聊天，本来多个人之间的交互是“网状结构”，当有了“qq群”这个中介者，多人交互模型就变成了“星状结构”
+      //     多架飞机与一个塔台之间的交互，A飞机发送信息给B飞机，利用中介者塔台沟通，而两个飞机不用耦合
       testFun21() {
-        // 结构同观察者模式
+        var feiji = function(name){
+          this.name = name
+        }
+        feiji.prototype.send = function(msg,to){
+          console.color(this.name+'发送了信息')
+          tatai.send(msg,to)
+        }
+        feiji.prototype.jieshou = function(msg){
+          console.color(this.name+'接收到'+msg)
+        }
+        var tatai={
+          all: [],
+          zhuce:function(f){
+            this.all[f.name] = f
+          },
+          send:function(msg,to){
+            this.all[to.name].jieshou(msg)
+          }
+        }
+        // 测试
+        var feiji1 = new feiji('feiji1')
+        var feiji2 = new feiji('feiji2')
+        tatai.zhuce(feiji1)
+        tatai.zhuce(feiji2)
+        feiji1.send('我马上降落，还有200米',feiji2)
       },
       // 访问者模式：主要用于对象结构相对稳定，但经常需要在此结构上定义新的操作。实用性很低
       // eg:像操作数组一样去操作对象
@@ -144,6 +169,7 @@
       //          用这种公式来封装定义功能，执行起来就像是在这行一个个命令一样，在语义上也最好用来封装一系列命令
       // 思考：我们平时写业务缺少对公用模块统一封装的习惯，总是草草实现当下需求，所以写的代码都是顺序且扁平的，没有通用性
       // 命令模式更适合于封装，在使用的时候，直接调用请求便可，而不是在其他业务中直接写这一坨的代码，糅杂在一起
+      // 司令发送命令给连长，连长再执行具体的命令，这个连长就是核心的命令调动和分配者
       // eg: 绘图命令
       testFun19() {
         // 命令模式统一模板
@@ -467,9 +493,31 @@
           }
         };
       },
-      // 代理模式：解决由于同源策略引起的跨域问题
+      // 代理模式：帮助别人做事，为其他对象提供一种代理以控制对这个对象的访问
+      // eg:解决由于同源策略引起的跨域问题
+      // eg:【远程代理】上海的房产中介代理北京的买房者，和上海的卖房者进行房产交易，同理还有婚介代理等
+      // eg:【虚拟代理】渲染网页先用站位图代替真图
       testFun9() {
-        // 略
+        // 代理模式需要三方
+        // 买家
+        function maijia(){
+          this.name = "小明"
+        }
+        // 中介卖房
+        function zhongjie(){}
+        zhongjie.prototype.maifang=function(){
+          new fangdong(new maijia()).maifang("20w")
+        }
+        // 房东 坐等收钱
+        function fangdong(maijia){
+          this.maijia_name = maijia.name
+          // 卖房
+          this.maifang=function(money){
+            console.color('收到了来自【' + this.maijia_name + '】'+money+'人民币')
+          }
+        }
+        // 测试
+        (new zhongjie).maifang()
       },
       // 适配器模式：将一个类或对象，方法转换为另一个类，对象，或者方法。以处理不兼容问题,同时也起到一定的解耦效果
       // eg:生活中的适配器三通水管、三线转两线插座
@@ -485,6 +533,7 @@
         console.color(arrToObjAdapter(arr));
       },
       // 外观模式：对一组复杂接口进行二次封装，以隐藏其复杂性,同时也起到一定的解耦效果
+      // eg:地主通过大门给穷人发馒头，穷人不用知道大院里处理麦子，面粉，馒头的处理过程。这里的大门就是外观模式的体现。
       // eg:简化底层接口复杂性：绑定事件addEventListener和attachEvent,以及onClick之间的使用优先级策略
       // eg:封装浏览器兼容性：阻止默认行为
       // eg:封装多个功能，简化底层操作【同时应用了单例模式】
@@ -549,6 +598,7 @@
         // 略
       },
       // 建造者模式：关注的是创建对象的过程，细节，一般用于创建复杂对象(多对象组合对象)
+      // eg:包工头建造房子
       testFun4() {
         // eg:需要创建应聘者对象，该对象可细分为姓名对象，职位对象，等
         // 准备局部类
