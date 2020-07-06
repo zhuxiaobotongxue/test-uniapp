@@ -29,6 +29,8 @@
     },
     methods: {
       // 安全提交：应用装饰者模式对普通提交进一步包装
+      // 应用了外观模式：对一组复杂接口进行二次封装，以隐藏其复杂性
+      // 应用了适配器模式：以处理数据不兼容问题，adapt步骤
       async onSafeSubmit() {
         this.formInfo.isBtnDisabled = true
         await tool.handleSubmit({

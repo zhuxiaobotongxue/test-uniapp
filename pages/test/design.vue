@@ -7,20 +7,20 @@
     methods: {
       testFun() {
         // 创建者模式：赢在起点，创建最基础对象,重点在创建对象
-        // this.testFun1();
-        // this.testFun2();
-        // this.testFun3();
-        // this.testFun4();
-        // this.testFun5()
-        // this.testFun6();
+        // this.testFun1(); // 简单工厂
+        // this.testFun2(); // 工厂方法
+        // this.testFun3(); // 抽象工厂
+        // this.testFun4(); // 建造者
+        // this.testFun5(); // 原型模式
+        // this.testFun6(); // 单例模式
         // 结构型设计模式:针对基础对象的小范围扩展和发挥，重点在功能
-        // this.testFun7()
-        // this.testFun8();
-        // this.testFun9()
-        // this.testFun10();
-        // this.testFun11();
-        // this.testFun12();
-        // this.testFun13();
+        // this.testFun7(); // 外观模式
+        // this.testFun8(); // 适配器模式
+        // this.testFun9(); // 代理模式
+        // this.testFun10();  // 装饰者模式
+        // this.testFun11();  // 桥接模式
+        // this.testFun12();  // 组合模式
+        // this.testFun13();  // 享元模式
         // 行为型设计模式：用于不同对象之间的交互，重点在交互
         // this.testFun14() // 模板方法
         // this.testFun15() // 观察者
