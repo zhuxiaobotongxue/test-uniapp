@@ -1,6 +1,44 @@
 <template>
   <view class="container">
-    <text>测试表单</text>
+    <form>
+      <view class="cu-form-group">
+        <view class="title required">标题</view>
+        <input placeholder="请输入标题" v-model="formInfo.section1.title"></input>
+      </view>
+      <view class="cu-form-group">
+        <view class="title">手机号码</view>
+        <input placeholder="输入框带标签" v-model="formInfo.section1.tel"></input>
+        <view class="cu-capsule radius">
+          <view class='cu-tag bg-blue '>
+            +86
+          </view>
+          <view class="cu-tag line-blue">
+            中国大陆
+          </view>
+        </view>
+      </view>
+      <view class="cu-bar bg-white" style="margin-top:1rpx">
+        <view class="action">
+          图片上传
+        </view>
+        <view class="action">
+          {{formInfo.section1.imgs.length}}/4
+        </view>
+      </view>
+      <view class="cu-form-group">
+        <view class="grid col-4 grid-square flex-sub">
+          <view class="bg-img" v-for="(item,index) in formInfo.section1.imgs" :key="index" @tap="viewImg" :data-url="formInfo.section1.imgs[index]">
+            <image :src="formInfo.section1.imgs[index]" mode="aspectFill"></image>
+            <view class="cu-tag bg-red" @tap.stop="delImg" :data-index="index">
+              <text class='cuIcon-close'></text>
+            </view>
+          </view>
+          <view class="solids" @tap="chooseImg" v-if="formInfo.section1.imgs.length<4">
+            <text class='cuIcon-cameraadd'></text>
+          </view>
+        </view>
+      </view>
+    </form>
     <view class="margin flex flex-direction">
       <button class="cu-btn line-blue lg block" :disabled="formInfo.isBtnDisabled" @click="onSafeSubmit">安全提交</button>
     </view>
@@ -20,8 +58,9 @@
         formInfo: {
           isBtnDisabled: false,
           section1: {
-            name: 'xxx',
-            tel: '15991856228'
+            title: '',
+            tel: '',
+            imgs: []
           }
         }
       };
@@ -41,7 +80,7 @@
       async onSafeSubmit() {
         this.formInfo.isBtnDisabled = true
         await tool.handleSubmit({
-          // formInfo: this.formInfo,
+          formInfo: this.formInfo,
           // verify: this.verify,
           // adapt: this.adapt,
           submit: this.submit
@@ -50,7 +89,8 @@
         this.formInfo.isBtnDisabled = false
       },
       async submit(formInfo) {
-        return await testApis.loadMockList(formInfo);
+        console.color(formInfo)
+        return await testApis.save(formInfo);
       },
       // verify(formInfo) {
       //   const { section1 } = formInfo;
@@ -70,7 +110,43 @@
       // },
       // dealResult(res) {
       //   console.color(res);
-      // }
+      // },
+      // 图片预览
+      viewImg(e) {
+        uni.previewImage({
+          urls: this.formInfo.section1.imgs,
+          current: e.currentTarget.dataset.url
+        });
+      },
+      // 图片删除
+      delImg(e) {
+        uni.showModal({
+          title: '删除提示',
+          content: '确定要删除这张图片吗？',
+          cancelText: '取消',
+          confirmText: '确定',
+          success: res => {
+            if (res.confirm) {
+              this.formInfo.section1.imgs.splice(e.currentTarget.dataset.index, 1)
+            }
+          }
+        })
+      },
+      // 图片选择
+      chooseImg() {
+        uni.chooseImage({
+          count: 4, //默认9
+          sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
+          sourceType: ['album'], //从相册选择
+          success: (res) => {
+            if (this.formInfo.section1.imgs.length != 0) {
+              this.formInfo.section1.imgs = this.formInfo.section1.imgs.concat(res.tempFilePaths)
+            } else {
+              this.formInfo.section1.imgs = res.tempFilePaths
+            }
+          }
+        });
+      }
     }
   };
 </script>

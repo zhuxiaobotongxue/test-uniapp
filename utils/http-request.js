@@ -2,6 +2,7 @@ import Request from 'zh-uni-request'
 import {
   AppConf
 } from '@/config'
+import store from '@/store'
 
 const http = new Request()
 
