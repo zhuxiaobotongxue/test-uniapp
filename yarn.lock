@@ -49,6 +49,11 @@ dingtalk-jsapi@^2.10.3:
   dependencies:
     promise-polyfill "^7.1.0"
 
+exif-js@^2.3.0:
+  version "2.3.0"
+  resolved "http://maven.xys12345.cn/repository/wlsj-npm-group/exif-js/-/exif-js-2.3.0.tgz#9d10819bf571f873813e7640241255ab9ce1a814"
+  integrity sha1-nRCBm/Vx+HOBPnZAJBJVq5zhqBQ=
+
 is-buffer@~1.1.1:
   version "1.1.6"
   resolved "https://registry.npm.taobao.org/is-buffer/download/is-buffer-1.1.6.tgz#efaa2ea9daa0d7ab2ea13a97b2b8ad51fefbe8be"

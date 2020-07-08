@@ -14,8 +14,13 @@ export const loadMockList = () => httpRequest.get('/api/mockList')
 /**
  * @function 测试提交mock post接口
  */
-export const save = () => httpRequest.post('/api/save')
+// export const save = () => httpRequest.post('/api/save')
 
+export const save = () => httpRequest.request({
+  noAuth: true,
+  url: '/api/save',
+  method: 'POST'
+});
 /**
  * @function 测试生产环境需要数据，用Promise直接返回
  */

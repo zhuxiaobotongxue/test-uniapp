@@ -6,7 +6,15 @@
         <input placeholder="请输入标题" v-model="formInfo.section1.title"></input>
       </view>
       <view class="cu-form-group">
-        <view class="title">手机号码</view>
+        <view class="title required">类别</view>
+        <picker @change="handleChangeType" :value="formInfo.section1.type.value" :range="formInfo.section1.type.opts">
+          <view class="picker">
+            {{ formInfo.section1.type.value > -1 ? formInfo.section1.type.opts[formInfo.section1.type.value] : '请选择类别' }}
+          </view>
+        </picker>
+      </view>
+      <view class="cu-form-group">
+        <view class="title required">手机号码</view>
         <input placeholder="输入框带标签" v-model="formInfo.section1.tel"></input>
         <view class="cu-capsule radius">
           <view class='cu-tag bg-blue '>
@@ -52,20 +60,57 @@
   import {
     tool
   } from '@/utils';
+  import {
+    AppConf
+  } from '@/config'
+  import {
+    APP_CONST
+  } from '@/constants'
+  import {
+    form
+  } from '@/mixins'
+
   export default {
+    mixins: [form],
     data() {
       return {
         formInfo: {
           isBtnDisabled: false,
           section1: {
             title: '',
+            type: {
+              sources: [],
+              opts: [],
+              value: -1
+            },
             tel: '',
             imgs: []
           }
         }
       };
     },
+    created() {
+      this.init();
+    },
     methods: {
+      init() {
+        this.initFieldOpts()
+      },
+      initFieldOpts() {
+        this.initOpts({
+          preField: 'section1',
+          field: 'type',
+          arr: APP_CONST.TYPE_MODES
+        })
+      },
+      // 类别选择
+      handleChangeType(e) {
+        this.commonChangePicker({
+          e,
+          preField: 'section1',
+          field: 'type'
+        })
+      },
       // 安全提交
       // 应用了外观模式：对一组复杂步骤进行二次封装，以隐藏其复杂性
       // 应用了模板方法模式:这里采用了面向过程的编程方式，利用多个回调，将各个过程的具体实现延迟到了调用时，同时共用了提交流程“算法骨架”
@@ -81,36 +126,68 @@
         this.formInfo.isBtnDisabled = true
         await tool.handleSubmit({
           formInfo: this.formInfo,
-          // verify: this.verify,
-          // adapt: this.adapt,
-          submit: this.submit
-          // dealResult: this.dealResult
+          verify: this.verify,
+          adapt: this.adapt,
+          submit: this.submit,
+          dealResult: this.dealResult
         });
         this.formInfo.isBtnDisabled = false
       },
+      // 注意：经验证该项目封装的库暂不支持formdata类型请求
+      // 但这里仅记录formdata请求组装形式
+      /*
+        const files = this.ImagePicker.getPhotos()
+        const formdata = new FormData()
+        formdata.append('title', this.title)
+        files.forEach(file => formdata.append('files', { uri: `file://${file.uri}`, type: 'multipart/form-data', name: file.fileName }))
+
+        let { data: result } = await saveHelpLog(formdata)
+
+        export const uploadFile = (formdata) => {
+          return httpRequest.request({
+            url: '/product-xczx/helpLog/saveHelpLog',
+            method: 'POST',
+            headers: { 'Content-Type': 'multipart/form-data' },
+            data: formdata
+          })
+        }
+      */
       async submit(formInfo) {
-        console.color(formInfo)
         return await testApis.save(formInfo);
       },
-      // verify(formInfo) {
-      //   const { section1 } = formInfo;
-      //   if (!section1.name || !section1.name.trim()) {
-      //     throw '姓名不能为空!';
-      //   }
-      //   if (!this.$validator.isMobilePhone(section1.tel, 'zh-CN')) {
-      //     throw '手机号码不符合规范!';
-      //   }
-      // },
-      // adapt(formInfo) {
-      //   const { section1 } = formInfo;
-      //   return {
-      //     name: section1.name,
-      //     tel: section1.tel
-      //   };
-      // },
-      // dealResult(res) {
-      //   console.color(res);
-      // },
+      verify(formInfo) {
+        const {
+          section1
+        } = formInfo;
+        if (!section1.title || !section1.title.trim()) {
+          throw '标题不能为空!';
+        }
+        if (section1.type.value === -1) {
+          throw '类型不能为空!';
+        }
+        if (!this.$validator.isMobilePhone(section1.tel, 'zh-CN')) {
+          throw '手机号码不符合规范!';
+        }
+      },
+      adapt(formInfo) {
+        const {
+          section1
+        } = formInfo;
+        return {
+          title: section1.title,
+          type: tool.getItemFieldByAnother({
+            arr: section1.type.sources,
+            aField: 'label',
+            aFieldVal: section1.type.opts[section1.type.value],
+            bField: 'value'
+          }),
+          tel: section1.tel,
+          imgs: section1.imgs
+        };
+      },
+      dealResult(res) {
+        console.color(res);
+      },
       // 图片预览
       viewImg(e) {
         uni.previewImage({
@@ -139,13 +216,48 @@
           sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
           sourceType: ['album'], //从相册选择
           success: (res) => {
-            if (this.formInfo.section1.imgs.length != 0) {
-              this.formInfo.section1.imgs = this.formInfo.section1.imgs.concat(res.tempFilePaths)
+            if (res && res.tempFilePaths && res.tempFilePaths.length) {
+              // 若在微信公众号H5端，需要解决图像压缩和旋转的问题
+              // #ifdef H5
+              tool.smartImg(res, resultPath => {
+                this.uploadFile({
+                  filePath: resultPath
+                })
+              })
+              // #endif
+              // #ifndef H5
+              this.uploadFile({
+                filePath: res.tempFilePaths[0]
+              })
+              // #endif
             } else {
-              this.formInfo.section1.imgs = res.tempFilePaths
+              this.$showErr('选择图片出错！')
             }
+          },
+          fail: () => {
+            this.$showErr('选取图片出错，请重试!')
           }
         });
+      },
+      // 上传单张图片
+      async uploadFile({
+        filePath
+      }) {
+        uni.uploadFile({
+          // url: AppConf.BaseUrl + '/oss/file/upload',
+          url: 'https://mjzdsapi.xys12345.cn/mjzds/oss/file/upload',
+          filePath, // 单文件
+          name: 'file',
+          // header: {
+          //   [TokenKey]: this.token
+          // },
+          success: uploadFileRes => {
+            if (uploadFileRes && uploadFileRes.statusCode === 200) {
+              let res = JSON.parse(uploadFileRes.data)
+              this.formInfo.section1.imgs.push(res.result)
+            }
+          }
+        })
       }
     }
   };
