@@ -4,7 +4,9 @@
   "main": "main.js",
   "license": "MIT",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint:create": "eslint --init",
+    "lint": "eslint . --fix"
   },
   "uni-app": {
     "scripts": {
@@ -34,6 +36,10 @@
     "zh-uni-request": "^1.0.2"
   },
   "devDependencies": {
+    "eslint": "^7.4.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-vue": "^6.2.2",
     "mockjs": "^1.1.0"
   }
 }

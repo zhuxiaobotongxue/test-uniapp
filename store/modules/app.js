@@ -1,14 +1,15 @@
+/* eslint-disable no-param-reassign */
 export default {
   state: {
-    initComplete: false
+    initComplete: false,
   },
   getters: {
-    initComplete: state => state.initComplete
+    initComplete: (state) => state.initComplete,
   },
   mutations: {
     SET_INIT_COMPLETE(state) {
-      state.initComplete = true
-    }
+      state.initComplete = true;
+    },
   },
-  actions: {}
-}
+  actions: {},
+};

@@ -1,14 +1,15 @@
+/* eslint-disable no-param-reassign */
 export default {
   state: {
-    dict: null
+    dict: null,
   },
   getters: {
-    dict: state => state.dict
+    dict: (state) => state.dict,
   },
   mutations: {
     SET_DICTS(state, dict) {
-      state.dict = dict
-    }
+      state.dict = dict;
+    },
   },
-  actions: {}
-}
+  actions: {},
+};

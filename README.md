@@ -14,6 +14,24 @@ ColorUI样式库，同时可在common.scss中自定义扩展
 函数异常处理规范：
   异常应该在被调用方法内部处理，被调用方法针对异步结果也应做必要判断，
   当异常无法在内部消化处理或有必要告诉调用者时，才会选择抛出
+代码格式化说明：
+基于项目中配置了.editorconfig会在保存时做最基础的统一，
+然后HBuilderX内置了jsbeautifyrc.js，若添加了prettier插件，则会以prettier.config.js为准，会在代码格式化时，起到作用【建议保持prettier插件和prettier.config.js配置的一致性，养成习惯】
+项目级别配置了eslint,会在开发者主动做代码检查的时候，进一步自动修复并格式化代码
+[所以尽量保持编辑器的格式化和eslint格式化的一致性是有一定道理的，当然要推荐vscode，应为它可以做到在保存并格式化的时候就直接使用eslint规则]
+
+## eslint常用命令配置
+<!-- 放在文件头会屏蔽整个文件 -->
+/* eslint-disable */ 
+
+<!-- 下面会屏蔽一段 -->
+/* eslint-disable */
+alert('foo');
+/* eslint-enable */
+
+<!-- 下面会屏蔽一句 -->
+// eslint-disable-next-line
+alert('foo');
 
 # 其他
 ## 开发工具

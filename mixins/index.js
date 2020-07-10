@@ -1,4 +1,5 @@
-import form from './form.js'
+import form from './form.js';
+
 export {
-  form
-}
+  form,
+};

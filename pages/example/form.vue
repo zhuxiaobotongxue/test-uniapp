@@ -214,7 +214,7 @@
         uni.chooseImage({
           count: 4, //默认9
           sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
-          sourceType: ['album'], //从相册选择
+          // sourceType: ['camera'], //  默认不配置该项，则既可以相机也可以相册
           success: (res) => {
             if (res && res.tempFilePaths && res.tempFilePaths.length) {
               // 若在微信公众号H5端，需要解决图像压缩和旋转的问题

@@ -4,24 +4,27 @@ export default {
     initOpts({
       preField,
       field,
-      arr
+      arr,
     }) {
-      this.formInfo[preField][field] = Object.assign({}, this.formInfo[preField][field], {
+      this.formInfo[preField][field] = {
+        ...this.formInfo[preField][field],
         sources: arr,
-        opts: arr.map(item => item['label'])
-      })
+        opts: arr.map((item) => item.label),
+      };
     },
     // 通用下拉单选方法
     commonChangePicker({
       e,
       preField,
-      field
+      field,
     }) {
       if (preField) {
-        this.formInfo[preField][field].value = e.detail.value == -1 ? 0 : e.detail.value
+        // eslint-disable-next-line
+        this.formInfo[preField][field].value = e.detail.value == -1 ? 0 : e.detail.value;
       } else {
-        this.formInfo[field].value = e.detail.value == -1 ? 0 : e.detail.value
+        // eslint-disable-next-line
+        this.formInfo[field].value = e.detail.value == -1 ? 0 : e.detail.value;
       }
-    }
-  }
-}
+    },
+  },
+};

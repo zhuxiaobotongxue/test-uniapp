@@ -2,10 +2,10 @@
 
 root = true
 
-[*]
+[*]                               # 对所有文件起作用，注这里配置会在保存和格式化时起作用，而eslint会检查这些作用后的代码是否符合了规范，当然，若发现不规范，也会及时自动修复部分内容
 charset = utf-8
 indent_style = space              # 空格缩进
 indent_size = 2                   # 缩进空格为2个
-end_of_line = lf                  # 文件换行符是 linux 的 `\n`
+end_of_line = lf                  # 文件换行符推荐使用 linux 的 'LF'
 trim_trailing_whitespace = true   # 不保留行末的空格
 insert_final_newline = true       # 文件末尾添加一个空行

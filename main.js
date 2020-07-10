@@ -1,40 +1,40 @@
-import Vue from 'vue'
-import App from './App'
-import store from './store'
-import * as R from 'ramda'
-import validator from 'validator'
-import Mock from '@/mock'
-import animated from 'animate.css'
-import { tool } from '@/utils'
-import MyPlugin from '@/plugin'
+import Vue from 'vue';
+import * as R from 'ramda';
+import validator from 'validator';
+import animated from 'animate.css';
+import { tool } from '@/utils';
+import MyPlugin from '@/plugin';
+// #ifdef H5
+import * as dd from 'dingtalk-jsapi';
+import store from './store';
+import App from './App';
 
-console.color = tool.colorLog
-App.mpType = 'app'
+// eslint-disable-next-line
+console.color = tool.colorLog;
+App.mpType = 'app';
 
-Vue.config.productionTip = false
-Vue.use(animated)
-Vue.use(MyPlugin)
+Vue.config.productionTip = false;
+Vue.use(animated);
+Vue.use(MyPlugin);
 
-Vue.prototype.$store = store
-Vue.prototype.$validator = validator
-Vue.prototype.$R = R
-// #ifdef H5 
-import * as dd from 'dingtalk-jsapi'
-Vue.prototype.$dd = dd
+Vue.prototype.$store = store;
+Vue.prototype.$validator = validator;
+Vue.prototype.$R = R;
+Vue.prototype.$dd = dd;
 // #endif
 // #ifdef APP-PLUS
 const {
   version, // 客户端的版本名称
   versionCode, // 客户端的版本号
-  appid // 当前应用的APPID
-} = plus.runtime
+  appid, // 当前应用的APPID
+} = plus.runtime;
 const {
   brand,
   model,
   pixelRatio,
   system,
-  platform
-} = uni.getSystemInfoSync()
+  platform,
+} = uni.getSystemInfoSync();
 Vue.prototype.$curAppInfo = {
   version,
   versionCode,
@@ -43,12 +43,12 @@ Vue.prototype.$curAppInfo = {
   model,
   pixelRatio,
   system,
-  platform
-}
+  platform,
+};
 // #endif
 
 const app = new Vue({
   store,
-  ...App
-})
-app.$mount()
+  ...App,
+});
+app.$mount();

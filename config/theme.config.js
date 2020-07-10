@@ -6,8 +6,8 @@ export default {
     },
     // 黑暗主题
     Dark: {
-      'color': '#ffffff',
+      color: '#ffffff',
       'background-color': '#000000',
-    }
-  }
-}
+    },
+  },
+};
