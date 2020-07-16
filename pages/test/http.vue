@@ -15,7 +15,7 @@ import { testApis } from '@/apis';
 export default {
   data() {
     return {
-      info: {}
+      info: {},
     };
   },
   methods: {
@@ -38,13 +38,13 @@ export default {
     async testRemote() {
       const res = await testApis.getToken({ appkey: 'dingpdwkf2uvdonamcpo', appsecret: '4o-TMElG_TCODHwBpp7WbkQKSUgNg23m6BlVT04PhHOfYwmF0xmvQX53wPD4hdgn' });
       console.color(res);
-    }
+    },
   },
   onLoad() {
     this.testMock();
     // this.testPromise();
     // this.testRemote();
-  }
+  },
 };
 </script>
 

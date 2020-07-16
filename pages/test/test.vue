@@ -15,13 +15,13 @@ export default {
     // 验证表单验证库
     testValidator() {
       console.color(this.$validator.isMobilePhone('15991856228'));
-    }
+    },
   },
   onLoad() {
     // this.testValidator();
     // 打印当前vue页对象
-    console.color(this)
-  }
+    console.color(this);
+  },
 };
 </script>
 

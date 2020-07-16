@@ -27,5 +27,6 @@ module.exports = {
     'import/prefer-default-export': ['off'], // 若仅有一项，则需要用export default而不是仅仅export
     'no-underscore-dangle': ['off'], // 下划线命名规则
     'no-restricted-syntax': ['off'], // 禁用for...in，推荐map等
+    'max-len': ['off'], // 禁用一行最长字符数
   },
 };

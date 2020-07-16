@@ -27,93 +27,95 @@
 </template>
 
 <script>
-  import {
-    tool
-  } from '@/utils';
-  import {
-    mapGetters,
-    mapActions
-  } from 'vuex';
-  import {
-    EnvDiffInH5
-  } from '@/interface';
-  export default {
-    data() {
-      return {
-        showSignBtn: true
-      };
+import {
+  tool,
+} from '@/utils';
+import {
+  mapGetters,
+  mapActions,
+} from 'vuex';
+import {
+  EnvDiffInH5,
+} from '@/interface';
+
+export default {
+  data() {
+    return {
+      showSignBtn: true,
+    };
+  },
+  computed: {
+    ...mapGetters(['userInfo']),
+    avatar() {
+      return this.userInfo.avatar || require('@/static/images/signin/photo.png');
     },
-    computed: {
-      ...mapGetters(['userInfo']),
-      avatar() {
-        return this.userInfo.avatar || require('@/static/images/signin/photo.png');
-      },
-      menuList() {
-        return [{
-          id: '9',
-          iconClass: 'cuIcon-safe text-blue',
-          label: '我的测试',
-          url: '/pages/test/index',
-          value: ''
-        }, {
-          id: '10',
-          iconClass: 'cuIcon-safe text-blue',
-          label: '关于',
-          url: '',
-          value: ''
-        }];
-      }
+    menuList() {
+      return [{
+        id: '9',
+        iconClass: 'cuIcon-safe text-blue',
+        label: '我的测试',
+        url: '/pages/test/index',
+        value: '',
+      }, {
+        id: '10',
+        iconClass: 'cuIcon-safe text-blue',
+        label: '关于',
+        url: '',
+        value: '',
+      }];
     },
-    mounted() {
-      // #ifdef H5
-      this.initSignBtn();
-      // #endif
-    },
-    methods: {
-      ...mapActions(['signOut']),
-      onTapEditor() {},
-      // 判断环境初始化登录按钮
-      initSignBtn() {
-        const that = this;
-        class IsShowSignBtn extends EnvDiffInH5 {
-          notInDingTalk() {
-            that.showSignBtn = true;
-          }
-          dd() {
-            that.showSignBtn = false;
-          }
+  },
+  mounted() {
+    // #ifdef H5
+    this.initSignBtn();
+    // #endif
+  },
+  methods: {
+    ...mapActions(['signOut']),
+    onTapEditor() {},
+    // 判断环境初始化登录按钮
+    initSignBtn() {
+      const that = this;
+      class IsShowSignBtn extends EnvDiffInH5 {
+        notInDingTalk() {
+          that.showSignBtn = true;
         }
-        let isShowSignBtn = new IsShowSignBtn();
-        isShowSignBtn[this.$dd.env.platform]();
-      },
-      handleSignOut() {
-        uni.showModal({
-          title: '提示',
-          content: '确定要退出登录吗?',
-          success: ({
-            confirm
-          }) => {
-            if (confirm) {
-              tool.routerUtil.goAuthPage(() => {
-                this.signOut();
-              });
-            }
+
+        dd() {
+          that.showSignBtn = false;
+        }
+      }
+      const isShowSignBtn = new IsShowSignBtn();
+      isShowSignBtn[this.$dd.env.platform]();
+    },
+    handleSignOut() {
+      uni.showModal({
+        title: '提示',
+        content: '确定要退出登录吗?',
+        success: ({
+          confirm,
+        }) => {
+          if (confirm) {
+            tool.routerUtil.goAuthPage(() => {
+              this.signOut();
+            });
           }
+        },
+      });
+    },
+    onTapMenuItem(menu) {
+      if (menu.url) {
+        uni.navigateTo({
+          url: menu.url,
         });
-      },
-      onTapMenuItem(menu) {
-        if (menu.url) {
-          uni.navigateTo({
-            url: menu.url
-          });
-        } else if (menu.clickHandle) {
-          menu.clickHandle();
-        } else {
-          this.$showErr('开发中...')
-        }
+      } else if (menu.clickHandle) {
+        menu.clickHandle();
+      } else {
+        this.$showErr('开发中...');
       }
-    }
-  };
+    },
+  },
+};
 </script>
 
 <style lang="scss">

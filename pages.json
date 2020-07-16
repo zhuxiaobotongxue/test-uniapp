@@ -103,6 +103,18 @@
       }
     }
     // #endif
+    , {
+      "path": "pages/example/list",
+      "style": {
+        "navigationBarTitleText": "分页加载列表",
+        "enablePullDownRefresh": true
+      }
+    }, {
+      "path": "pages/example/detail",
+      "style": {
+        "navigationBarTitleText": "详情"
+      }
+    }
   ],
   "tabBar": {
     "borderStyle": "black",

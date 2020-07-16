@@ -1,6 +1,6 @@
 <!-- 首次进入应用，任何页面都会经过该文件，适合做全局配置和拦截 -->
 <script>
-import { appApis } from '@/apis';
+import { appApis } from '@/apis'
 
 export default {
   onLaunch() {
@@ -12,13 +12,13 @@ export default {
     // 钉钉js_api鉴权
     initDingConfig() {
       try {
-        const that = this;
-        const dd = that.$dd;
-        const callbackUrl = window.location.origin;
+        const that = this
+        const dd = that.$dd
+        const callbackUrl = window.location.origin
         if (!dd.other) {
           dd.ready(() => {
-            appApis.getDingConfig(callbackUrl).then((res) => {
-              const { result } = res;
+            appApis.getDingConfig(callbackUrl).then(res => {
+              const { result } = res
               dd.config({
                 agentId: result.agentId, // 必填，微应用ID
                 corpId: result.corpId, // 必填，企业ID
@@ -26,20 +26,20 @@ export default {
                 nonceStr: result.nonceStr, // 必填，生成签名的随机串
                 signature: result.signature, // 必填，签名
                 type: 0, // 选填。0表示微应用的jsapi,1表示服务窗的jsapi；不填默认为0。该参数从dingtalk.js的0.8.3版本开始支持
-                jsApiList: ['device.geolocation.get', 'device.geolocation.start', 'device.geolocation.stop'], // 必填，需要使用的jsapi列表，注意：不要带dd。
-              });
-              dd.error((err) => {
-                that.$showErr(err);
-              });
-            });
-          });
+                jsApiList: ['device.geolocation.get', 'device.geolocation.start', 'device.geolocation.stop'] // 必填，需要使用的jsapi列表，注意：不要带dd。
+              })
+              dd.error(err => {
+                that.$showErr(err)
+              })
+            })
+          })
         }
       } catch (err) {
-        this.$showErr(err);
+        this.$showErr(err)
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 <style lang="scss">
 /* 解决头条小程序组件内引入字体不生效的问题 */
@@ -50,8 +50,11 @@ export default {
 }
 
 /* #endif */
-/* 引入ColorUI样式库，注意不支持NVUE的判断 */
+
 /* #ifndef APP-NVUE */
+/* 引入uni通用样式库 */
+@import 'styles/uni.css';
+/* 引入ColorUI样式库，注意不支持NVUE的判断 */
 @import 'styles/icon.css';
 @import 'styles/main.css';
 /* 引入自定义扩展通用样式库 */

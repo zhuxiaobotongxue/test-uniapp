@@ -7,9 +7,10 @@
 
 <script>
 import { EnvDiffInH5 } from '@/interface';
+
 export default {
   mounted() {
-  }
+  },
 };
 </script>
 
