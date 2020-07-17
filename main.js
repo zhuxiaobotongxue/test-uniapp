@@ -3,23 +3,22 @@ import * as R from 'ramda';
 import validator from 'validator';
 import { tool } from '@/utils';
 import MyPlugin from '@/plugin';
-// #ifdef H5
-import animated from 'animate.css';
-import * as dd from 'dingtalk-jsapi';
 import store from './store';
 import App from './App';
-
-// eslint-disable-next-line
-console.color = tool.colorLog;
-App.mpType = 'app';
-
-Vue.config.productionTip = false;
-Vue.use(animated);
-Vue.use(MyPlugin);
 
 Vue.prototype.$store = store;
 Vue.prototype.$validator = validator;
 Vue.prototype.$R = R;
+Vue.use(MyPlugin);
+Vue.config.productionTip = false;
+// eslint-disable-next-line
+console.color = tool.colorLog;
+App.mpType = 'app';
+
+// #ifdef H5
+import animated from 'animate.css';
+Vue.use(animated);
+import * as dd from 'dingtalk-jsapi';
 Vue.prototype.$dd = dd;
 // #endif
 // #ifdef APP-PLUS
