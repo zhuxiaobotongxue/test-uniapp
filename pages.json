@@ -17,29 +17,9 @@
         }
       }
     }, {
-      "path": "pages/test/index",
-      "style": {
-        "navigationBarTitleText": "测试"
-      }
-    }, {
-      "path": "pages/test/dingding",
-      "style": {
-        "navigationBarTitleText": "钉钉"
-      }
-    }, {
       "path": "pages/example/form",
       "style": {
         "navigationBarTitleText": "表单"
-      }
-    }, {
-      "path": "pages/test/test",
-      "style": {
-        "navigationBarTitleText": "通用测试"
-      }
-    }, {
-      "path": "pages/test/ramda",
-      "style": {
-        "navigationBarTitleText": "函数式"
       }
     }, {
       "path": "pages/test/http",
@@ -74,21 +54,6 @@
       "path": "pages/account/signin",
       "style": {
         "navigationBarTitleText": "登录"
-      }
-    }, {
-      "path": "pages/test/temp",
-      "style": {
-        "navigationBarTitleText": "临时测试"
-      }
-    }, {
-      "path": "pages/test/func",
-      "style": {
-        "navigationBarTitleText": "高阶函数"
-      }
-    }, {
-      "path": "pages/test/design",
-      "style": {
-        "navigationBarTitleText": "设计模式"
       }
     }
     // #ifdef MP-WEIXIN
