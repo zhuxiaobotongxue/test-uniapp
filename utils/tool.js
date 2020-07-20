@@ -86,24 +86,17 @@ export const handleSubmit = async ({
   submit,
   dealResult,
 }) => {
-  try {
-    if (verify) {
-      verify(formInfo);
-    }
-    if (submit) {
-      const res = await submit(adapt ? adapt(formInfo) : formInfo);
-      if (dealResult) {
-        dealResult(res);
-      }
-    } else {
-      throw new Error('submit回调方法必须提供！');
-    }
-  } catch (err) {
-    uni.showToast({
-      icon: 'none',
-      title: typeof err === 'string' ? err : JSON.stringify(err),
-      duration: 2500,
-    });
+  let isPass = true // 默认验证通过
+  let res = null
+  if (verify) {
+    isPass = verify(formInfo);
+  }
+  if (isPass && submit) {
+    const res = await submit(adapt ? adapt(formInfo) : formInfo);
+  }
+  // 不论是否验证通过，只要有结果回调，都会调用
+  if (dealResult) {
+    dealResult(res);
   }
 };
 // 复合结构数据中,根据一个变量,获取同节点的另一个变量值
@@ -126,7 +119,7 @@ export const objectURLToBlob = (url, callback) => {
   const http = new XMLHttpRequest();
   http.open('GET', url, true);
   http.responseType = 'blob';
-  http.onload = function (e) {
+  http.onload = function(e) {
     if (this.status == 200 || this.status === 0) {
       callback(this.response);
     }
@@ -161,8 +154,12 @@ export const rotateImg = (img, direction, canvas, times = 1) => {
   if (img == null) return;
 
   // img的高度和宽度不能在img元素隐藏后获取，否则会出错
-  let { height } = img;
-  let { width } = img;
+  let {
+    height
+  } = img;
+  let {
+    width
+  } = img;
   const maxWidth = 500;
   let canvasWidth = width; // 图片原始长宽
   let canvasHeight = height;
@@ -240,7 +237,7 @@ export const smartImg = (fileObj, callback) => {
   let _imgInfo = {};
 
   // 获取图片元信息,Orientation是拍摄方向，可惜有的图片获取不到
-  EXIF.getData(_resFile, function () {
+  EXIF.getData(_resFile, function() {
     _imgInfo = EXIF.getAllTags(this);
   });
 
@@ -267,3 +264,19 @@ export const smartImg = (fileObj, callback) => {
   });
 };
 /* eslint-enable */
+// 点击菜单项
+export const handleMenu = (menu) => {
+  if (menu.url) {
+    uni.navigateTo({
+      url: menu.url,
+    });
+  } else if (menu.clickHandle) {
+    menu.clickHandle();
+  } else {
+    uni.showToast({
+      icon: 'none',
+      title: '开发中...',
+      duration: 2500
+    })
+  }
+}

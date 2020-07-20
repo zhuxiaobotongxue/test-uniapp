@@ -10,8 +10,9 @@
         </view>
       </view>
     </view>
-    <view class="cu-list menu card-menu margin-top-xl margin-bottom-xl shadow-lg">
-      <view v-for="menu in menuList" :key="menu.id" class="cu-item arrow" @click="onTapMenuItem(menu)">
+    <!-- card-menu -->
+    <view class="cu-list menu margin-top-xs margin-bottom-xl shadow-lg">
+      <view v-for="menu in menuList" :key="menu.id" class="cu-item arrow" @click="handleMenu(menu)">
         <view class="content">
           <text :class="[menu.iconClass, 'text-lg']"></text>
           <text class="text-grey">{{ menu.label }}</text>
@@ -72,7 +73,7 @@ export default {
   },
   methods: {
     ...mapActions(['signOut']),
-    onTapEditor() {},
+    handleMenu: tool.handleMenu,
     // 判断环境初始化登录按钮
     initSignBtn() {
       const that = this;
@@ -102,18 +103,7 @@ export default {
           }
         },
       });
-    },
-    onTapMenuItem(menu) {
-      if (menu.url) {
-        uni.navigateTo({
-          url: menu.url,
-        });
-      } else if (menu.clickHandle) {
-        menu.clickHandle();
-      } else {
-        this.$showErr('开发中...');
-      }
-    },
+    }
   },
 };
 </script>

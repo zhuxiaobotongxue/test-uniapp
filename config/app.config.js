@@ -1,7 +1,7 @@
 const env = process.env.NODE_ENV;
 const baseUrls = {
-  development: 'https://oapi.dingtalk.com',
-  production: 'https://oapi.dingtalk.com',
+  development: '',
+  production: '',
 };
 const BaseUrl = baseUrls[env];
 

@@ -22,6 +22,11 @@
         "navigationBarTitleText": "表单"
       }
     }, {
+      "path": "pages/test/index",
+      "style": {
+        "navigationBarTitleText": "测试"
+      }
+    }, {
       "path": "pages/test/http",
       "style": {
         "navigationBarTitleText": "请求"

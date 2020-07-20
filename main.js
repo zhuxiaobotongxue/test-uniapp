@@ -5,6 +5,7 @@ import { tool } from '@/utils';
 import MyPlugin from '@/plugin';
 import store from './store';
 import App from './App';
+import Mock from '@/mock';
 
 Vue.prototype.$store = store;
 Vue.prototype.$validator = validator;
@@ -14,6 +15,7 @@ Vue.config.productionTip = false;
 // eslint-disable-next-line
 console.color = tool.colorLog;
 App.mpType = 'app';
+
 
 // #ifdef H5
 import animated from 'animate.css';

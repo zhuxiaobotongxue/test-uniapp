@@ -38,11 +38,11 @@
 </template>
 
 <script>
-import { testApis } from '@/apis';
-import { tool } from '@/utils';
+import { testApis } from '@/apis'
+import { tool } from '@/utils'
 // import { AppConf } from '@/config'
-import { APP_CONST } from '@/constants';
-import { form } from '@/mixins';
+import { APP_CONST } from '@/constants'
+import { form } from '@/mixins'
 
 export default {
   mixins: [form],
@@ -55,35 +55,35 @@ export default {
           type: {
             sources: [],
             opts: [],
-            value: -1,
+            value: -1
           },
           tel: '',
-          imgs: [],
-        },
-      },
-    };
+          imgs: []
+        }
+      }
+    }
   },
   created() {
-    this.init();
+    this.init()
   },
   methods: {
     init() {
-      this.initFieldOpts();
+      this.initFieldOpts()
     },
     initFieldOpts() {
       this.initOpts({
         preField: 'section1',
         field: 'type',
-        arr: APP_CONST.TYPE_MODES,
-      });
+        arr: APP_CONST.TYPE_MODES
+      })
     },
     // 类别选择
     handleChangeType(e) {
       this.commonChangePicker({
         e,
         preField: 'section1',
-        field: 'type',
-      });
+        field: 'type'
+      })
     },
     // 安全提交
     // 应用了外观模式：对一组复杂步骤进行二次封装，以隐藏其复杂性
@@ -96,16 +96,16 @@ export default {
     // adapt步骤应用了适配器模式：以处理数据不兼容问题
     // submit步骤会应用到命令模式,httpRequest.request({url,method: 'GET',params}),这种统一的命令式的调用方式很好的诠释了命令模式
     // 当共用表单时很可能会应用到“状态模式”，每个步骤针对不同的业务类型维护不同的状态，动态匹配当前业务状态。eg:注册，登录，忘记密码等共用表单业务场景。该场景下dealResult还很可能会用到“享元模式”
-    async onSafeSubmit() {
-      this.formInfo.isBtnDisabled = true;
-      await tool.handleSubmit({
+    onSafeSubmit() {
+      this.formInfo.isBtnDisabled = true
+      tool.handleSubmit({
         formInfo: this.formInfo,
         verify: this.verify,
         adapt: this.adapt,
         submit: this.submit,
-        dealResult: this.dealResult,
-      });
-      this.formInfo.isBtnDisabled = false;
+        dealResult: this.dealResult
+      })
+      this.formInfo.isBtnDisabled = false
     },
     // 注意：经验证该项目封装的库暂不支持formdata类型请求
     // 但这里仅记录formdata请求组装形式
@@ -127,43 +127,48 @@ export default {
         }
       */
     async submit(formInfo) {
-      await testApis.save(formInfo);
+      await testApis.save(formInfo)
     },
     verify(formInfo) {
-      const { section1 } = formInfo;
+      const { section1 } = formInfo
+      let isPass = true
+
       if (!section1.title || !section1.title.trim()) {
-        throw new Error('标题不能为空!');
+        isPass = false
+        this.$showErr('标题不能为空!')
       }
       if (section1.type.value === -1) {
-        throw new Error('类型不能为空!');
+        isPass = false
+        this.$showErr('类型不能为空!')
       }
       if (!this.$validator.isMobilePhone(section1.tel, 'zh-CN')) {
-        throw new Error('手机号码不符合规范!');
+        isPass = false
+        this.$showErr('手机号码不符合规范!')
       }
+      return isPass
     },
     adapt(formInfo) {
-      const { section1 } = formInfo;
+      const { section1 } = formInfo
       return {
         title: section1.title,
         type: tool.getItemFieldByAnother({
           arr: section1.type.sources,
           aField: 'label',
           aFieldVal: section1.type.opts[section1.type.value],
-          bField: 'value',
+          bField: 'value'
         }),
         tel: section1.tel,
-        imgs: section1.imgs,
-      };
+        imgs: section1.imgs
+      }
     },
     dealResult(res) {
-      this.$showErr(res);
     },
     // 图片预览
     viewImg(e) {
       uni.previewImage({
         urls: this.formInfo.section1.imgs,
-        current: e.currentTarget.dataset.url,
-      });
+        current: e.currentTarget.dataset.url
+      })
     },
     // 图片删除
     delImg(e) {
@@ -172,12 +177,12 @@ export default {
         content: '确定要删除这张图片吗？',
         cancelText: '取消',
         confirmText: '确定',
-        success: (res) => {
+        success: res => {
           if (res.confirm) {
-            this.formInfo.section1.imgs.splice(e.currentTarget.dataset.index, 1);
+            this.formInfo.section1.imgs.splice(e.currentTarget.dataset.index, 1)
           }
-        },
-      });
+        }
+      })
     },
     // 图片选择
     chooseImg() {
@@ -185,29 +190,29 @@ export default {
         count: 4, // 默认9
         sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
         // sourceType: ['camera'], //  默认不配置该项，则既可以相机也可以相册
-        success: (res) => {
+        success: res => {
           if (res && res.tempFilePaths && res.tempFilePaths.length) {
             // 若在微信公众号H5端，需要解决图像压缩和旋转的问题
             // #ifdef H5
-            tool.smartImg(res, (resultPath) => {
+            tool.smartImg(res, resultPath => {
               this.uploadFile({
-                filePath: resultPath,
-              });
-            });
+                filePath: resultPath
+              })
+            })
             // #endif
             // #ifndef H5
             this.uploadFile({
-              filePath: res.tempFilePaths[0],
-            });
+              filePath: res.tempFilePaths[0]
+            })
             // #endif
           } else {
-            this.$showErr('选择图片出错！');
+            this.$showErr('选择图片出错！')
           }
         },
         fail: () => {
-          this.$showErr('选取图片出错，请重试!');
-        },
-      });
+          this.$showErr('选取图片出错，请重试!')
+        }
+      })
     },
     // 上传单张图片
     async uploadFile({ filePath }) {
@@ -219,16 +224,16 @@ export default {
         // header: {
         //   [TokenKey]: this.token
         // },
-        success: (uploadFileRes) => {
+        success: uploadFileRes => {
           if (uploadFileRes && uploadFileRes.statusCode === 200) {
-            const res = JSON.parse(uploadFileRes.data);
-            this.formInfo.section1.imgs.push(res.result);
+            const res = JSON.parse(uploadFileRes.data)
+            this.formInfo.section1.imgs.push(res.result)
           }
-        },
-      });
-    },
-  },
-};
+        }
+      })
+    }
+  }
+}
 </script>
 
 <style lang="scss"></style>
