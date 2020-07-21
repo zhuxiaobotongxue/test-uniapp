@@ -127,7 +127,7 @@ export default {
         }
       */
     async submit(formInfo) {
-      await testApis.save(formInfo)
+      return await testApis.save(formInfo)
     },
     verify(formInfo) {
       const { section1 } = formInfo
@@ -162,6 +162,7 @@ export default {
       }
     },
     dealResult(res) {
+      console.log(res)
     },
     // 图片预览
     viewImg(e) {

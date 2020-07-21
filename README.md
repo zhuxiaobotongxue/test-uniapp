@@ -30,7 +30,7 @@ alert('foo');
 // eslint-disable-next-line
 alert('foo');
 -----------------------------------------------------------
-# 其他
+# 钉钉微应用
 钉钉微应用移动端调试内网穿透
 应用首页地址：http://jhzl.vaiwan.com?showmenu=false
 内网穿透命令：./ding -config=./ding.cfg -subdomain=jhzl 8082
@@ -38,6 +38,6 @@ alert('foo');
 解决方案：在同组织下分别为每个前端开发者创建测试项目，仅对应开发者自己可见，并配置内网穿透[eg：cs_zxb.vaiwan.com]。
          开发环境代码运行后，启动内网穿透映射至该测试项目，即可正常开发和测试
 --------------------------------------------------------------------
-微信小程序
+# 微信小程序
 引入自定义组件库vant-weapp 1.3.3版本， es6模式
 [vant-weapp](https://youzan.github.io/vant-weapp/#/quickstart)

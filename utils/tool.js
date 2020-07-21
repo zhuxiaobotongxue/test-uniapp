@@ -77,7 +77,7 @@ export const routerUtil = {
   },
 };
 /**
- * @function 封装表单
+ * @function 封装表单提交
  */
 export const handleSubmit = async ({
   formInfo = {},
@@ -92,11 +92,11 @@ export const handleSubmit = async ({
     isPass = verify(formInfo);
   }
   if (isPass && submit) {
-    const res = await submit(adapt ? adapt(formInfo) : formInfo);
+    res = await submit(adapt ? adapt(formInfo) : formInfo);
   }
-  // 不论是否验证通过，只要有结果回调，都会调用
+  // 不论是否验证通过，都会调用
   if (dealResult) {
-    dealResult(res);
+    dealResult(isPass ? res : {code: -1, msg: '验证未通过!'});
   }
 };
 // 复合结构数据中,根据一个变量,获取同节点的另一个变量值
