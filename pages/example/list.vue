@@ -1,57 +1,55 @@
 <template>
-  <view>
-    <view class="banner" @click="goDetail(banner)">
-      <image class="banner-img" :src="banner.cover"></image>
-      <view class="banner-title">{{ banner.title }}</view>
+  <view class="container">
+    <view class="banner" @click="goDetail(info)">
+      <image class="banner-img" :src="info.img"></image>
+      <view class="banner-title">{{ info.title }}</view>
     </view>
     <view class="uni-list">
-      <view class="uni-list-cell" hover-class="uni-list-cell-hover" v-for="(value, key) in listData" :key="key" @click="goDetail(value)">
+      <view class="uni-list-cell" hover-class="uni-list-cell-hover" v-for="(item, key) in listData" :key="key" @click="goDetail(item)">
         <view class="uni-media-list">
-          <image class="uni-media-list-logo" :src="value.cover"></image>
+          <image class="uni-media-list-logo" :src="item.cover"></image>
           <view class="uni-media-list-body">
-            <view class="uni-media-list-text-top">{{ value.title }}</view>
+            <view class="uni-media-list-text-top">{{ item.title }}</view>
             <view class="uni-media-list-text-bottom">
-              <text>{{ value.author_name }}</text>
-              <text>{{ value.published_at }}</text>
+              <text>{{ item.author_name }}</text>
+              <text>{{ item.published_at }}</text>
             </view>
           </view>
         </view>
       </view>
     </view>
-    <uni-load-more :status="status" :icon-size="16" :content-text="contentText" />
+    <uni-load-more :status="loadStatus" :icon-size="16" :content-text="contentText" />
   </view>
 </template>
 
 <script>
 import { uniLoadMore } from '@dcloudio/uni-ui'
-// var dateUtils = require('../../../common/util.js').dateUtils;
-
+import { testApis } from '@/apis'
 export default {
   components: {
     uniLoadMore
   },
   data() {
     return {
-      banner: {},
+      info: {},
       listData: [],
       last_id: '',
-      reload: false,
-      status: 'more',
+      reload: false, // 控制加载效果
+      loadStatus: 'more', // more（loading前）、loading（loading中）、noMore（没有更多了）
       contentText: {
         contentdown: '上拉加载更多',
         contentrefresh: '加载中',
-        contentnomore: '没有更多'
+        contentnomore: '没有更多了'
       }
     }
   },
   onLoad() {
-    this.getBanner()
-    this.getList()
+    this.init()
   },
   onPullDownRefresh() {
     this.reload = true
     this.last_id = ''
-    this.getBanner()
+    this.fetchInfo()
     this.getList()
   },
   onReachBottom() {
@@ -59,23 +57,18 @@ export default {
     this.getList()
   },
   methods: {
-    getBanner() {
-      let data = {
-        column: 'id,post_id,title,author_name,cover,published_at' //需要的字段名
+    init() {
+      this.fetchInfo()
+      this.getList()
+    },
+    async fetchInfo() {
+      const { code, data } = await testApis.loadMockInfo()
+      if (code === 200) {
+        this.info = data.obj
+        uni.stopPullDownRefresh() // 停止下拉加载
+      } else {
+        this.$showErr('请求异常！')
       }
-      uni.request({
-        url: 'https://unidemo.dcloud.net.cn/api/banner/36kr',
-        data: data,
-        success: data => {
-          uni.stopPullDownRefresh()
-          if (data.statusCode == 200) {
-            this.banner = data.data
-          }
-        },
-        fail: (data, code) => {
-          console.log('fail' + JSON.stringify(data))
-        }
-      })
     },
     getList() {
       var data = {
@@ -83,7 +76,7 @@ export default {
       }
       if (this.last_id) {
         //说明已有数据，目前处于上拉加载
-        this.status = 'loading'
+        this.loadStatus = 'loading'
         data.minId = this.last_id
         data.time = new Date().getTime() + ''
         data.pageSize = 10
@@ -139,51 +132,51 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 .banner {
   height: 360rpx;
   overflow: hidden;
   position: relative;
   background-color: #ccc;
+  &-img {
+    width: 100%;
+    height: 360rpx;
+  }
+  &-title {
+    max-height: 84rpx;
+    overflow: hidden;
+    position: absolute;
+    left: 30rpx;
+    bottom: 30rpx;
+    width: 90%;
+    font-size: 32rpx;
+    font-weight: 400;
+    line-height: 42rpx;
+    color: white;
+    z-index: 11;
+  }
 }
 
-.banner-img {
-  width: 100%;
-}
-
-.banner-title {
-  max-height: 84rpx;
-  overflow: hidden;
-  position: absolute;
-  left: 30rpx;
-  bottom: 30rpx;
-  width: 90%;
-  font-size: 32rpx;
-  font-weight: 400;
-  line-height: 42rpx;
-  color: white;
-  z-index: 11;
-}
-
-.uni-media-list-logo {
-  width: 180rpx;
-  height: 140rpx;
-}
-
-.uni-media-list-body {
-  height: auto;
-  justify-content: space-around;
-}
-
-.uni-media-list-text-top {
-  height: 74rpx;
-  font-size: 28rpx;
-  overflow: hidden;
-}
-
-.uni-media-list-text-bottom {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+.uni-media-list {
+  &-logo {
+    width: 180rpx;
+    height: 140rpx;
+  }
+  &-body {
+    height: auto;
+    justify-content: space-around;
+  }
+  &-text {
+    &-top {
+      height: 74rpx;
+      font-size: 28rpx;
+      overflow: hidden;
+    }
+    &-bottom {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
 }
 </style>

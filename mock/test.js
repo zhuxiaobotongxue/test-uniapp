@@ -1,6 +1,8 @@
 import Mock from 'mockjs';
 
-const { Random } = Mock;
+const {
+  Random
+} = Mock;
 /**
  * @function 编辑mock对象数据
  */
@@ -10,10 +12,11 @@ export const mockInfo = {
     obj: {
       id: '@id',
       name: '@cname',
+      title: '@cparagraph(1)',
       'age|1-100': 100,
       'state|1': true,
       date: '@datetime()',
-      img: Random.image('200x100', '#894FC4', '#FFF', 'png', 'img.png'),
+      img: Random.image('375x180', '#894FC4', '#FFF', 'png', 'img.png'),
     },
   },
 };
