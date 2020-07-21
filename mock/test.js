@@ -11,12 +11,20 @@ export const mockInfo = {
   data: {
     obj: {
       id: '@id',
+      img: Random.image('375x180', '#894FC4', '#FFF', 'png', 'img.png'),
       name: '@cname',
+      date: '@datetime()',
       title: '@cparagraph(1)',
+      desc: '@cparagraph',
       'age|1-100': 100,
       'state|1': true,
-      date: '@datetime()',
-      img: Random.image('375x180', '#894FC4', '#FFF', 'png', 'img.png'),
+      'label|+1': [
+        '射手',
+        '法师',
+        '坦克',
+        '刺客',
+        '辅助',
+      ]
     },
   },
 };
@@ -26,17 +34,22 @@ export const mockInfo = {
 export const mockList = {
   code: 200,
   data: {
-    'arr|3-15': [{
+    'arr|3-20': [{
       id: '@id',
+      img: Random.image('90x70', '#894FC4', '#FFF', 'png', 'img.png'),
+      name: '@cname',
+      date: '@datetime()',
       title: '@cparagraph(1)',
       desc: '@cparagraph',
+      'age|1-100': 100,
+      'state|1': true,
       'label|+1': [
         '射手',
         '法师',
         '坦克',
         '刺客',
         '辅助',
-      ],
+      ]
     }],
   },
 };

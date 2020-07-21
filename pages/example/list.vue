@@ -5,26 +5,27 @@
       <view class="banner-title">{{ info.title }}</view>
     </view>
     <view class="uni-list">
-      <view class="uni-list-cell" hover-class="uni-list-cell-hover" v-for="(item, key) in listData" :key="key" @click="goDetail(item)">
+      <view class="uni-list-cell" hover-class="uni-list-cell-hover" v-for="(item, key) in list.data" :key="key" @click="goDetail(item)">
         <view class="uni-media-list">
-          <image class="uni-media-list-logo" :src="item.cover"></image>
+          <image class="uni-media-list-logo" :src="item.img"></image>
           <view class="uni-media-list-body">
             <view class="uni-media-list-text-top">{{ item.title }}</view>
             <view class="uni-media-list-text-bottom">
-              <text>{{ item.author_name }}</text>
-              <text>{{ item.published_at }}</text>
+              <text>{{ item.name }}</text>
+              <text>{{ item.date }}</text>
             </view>
           </view>
         </view>
       </view>
     </view>
-    <uni-load-more :status="loadStatus" :icon-size="16" :content-text="contentText" />
+    <uni-load-more :status="list.load.status" :icon-size="16" :content-text="list.load.text" />
   </view>
 </template>
 
 <script>
 import { uniLoadMore } from '@dcloudio/uni-ui'
 import { testApis } from '@/apis'
+import { tool } from '@/utils'
 export default {
   components: {
     uniLoadMore
@@ -32,101 +33,85 @@ export default {
   data() {
     return {
       info: {},
-      listData: [],
-      last_id: '',
-      reload: false, // 控制加载效果
-      loadStatus: 'more', // more（loading前）、loading（loading中）、noMore（没有更多了）
-      contentText: {
-        contentdown: '上拉加载更多',
-        contentrefresh: '加载中',
-        contentnomore: '没有更多了'
+      list: {
+        params: {
+          pageNumber: 1,
+          pageSize: 20,
+          searchText: ''
+        },
+        data: [],
+        load: {
+          status: 'more', // more（loading前）、loading（loading中）、noMore（没有更多了）
+          text: {
+            contentdown: '上拉加载更多',
+            contentrefresh: '加载中',
+            contentnomore: '没有更多了'
+          }
+        }
       }
     }
   },
   onLoad() {
     this.init()
   },
+  // 下拉刷新
   onPullDownRefresh() {
-    this.reload = true
-    this.last_id = ''
-    this.fetchInfo()
-    this.getList()
+    this.refreshList()
   },
+  // 触底加载更多
   onReachBottom() {
-    this.status = 'more'
-    this.getList()
+    if (this.list.load.status !== 'noMore') {
+      this.list.load.status = 'more'
+      this.fetchList()
+    }
   },
   methods: {
     init() {
       this.fetchInfo()
-      this.getList()
+      this.fetchList()
     },
+    // 刷新：还原请求参数，并重新请求渲染
+    refreshList() {
+      this.list.params = Object.assign(this.list.params, {
+        pageNumber: 1,
+        searchText: ''
+      })
+      this.init()
+    },
+    // 获取列表数据
+    async fetchList() {
+      const _isLoadfirst = this.list.params.pageNumber === 1
+      if (!_isLoadfirst) {
+        this.list.load.status = 'loading'
+      }
+      const { code, data } = await testApis.loadMockList(this.list.params)
+      if (code === 200) {
+        let _arr = data.arr // 适配
+        this.list.data = _isLoadfirst ? _arr : this.list.data.concat(_arr)
+        if (_arr.length < this.list.params.pageSize) {
+          this.list.load.status = 'noMore'
+        } else {
+          this.list.params.pageNumber++
+        }
+      } else {
+        this.$showErr('列表请求异常！')
+      }
+    },
+    // 获取对象信息
     async fetchInfo() {
       const { code, data } = await testApis.loadMockInfo()
       if (code === 200) {
         this.info = data.obj
         uni.stopPullDownRefresh() // 停止下拉加载
       } else {
-        this.$showErr('请求异常！')
+        this.$showErr('对象数据请求异常！')
       }
     },
-    getList() {
-      var data = {
-        column: 'id,post_id,title,author_name,cover,published_at' //需要的字段名
+    // 前往详情页
+    goDetail(param) {
+      if (param.id) {
+        tool.routerUtil.navigateTo({ url: './detail', params: { id: param.id } })
       }
-      if (this.last_id) {
-        //说明已有数据，目前处于上拉加载
-        this.loadStatus = 'loading'
-        data.minId = this.last_id
-        data.time = new Date().getTime() + ''
-        data.pageSize = 10
-      }
-      uni.request({
-        url: 'https://unidemo.dcloud.net.cn/api/news',
-        data: data,
-        success: data => {
-          if (data.statusCode == 200) {
-            let list = this.setTime(data.data)
-            this.listData = this.reload ? list : this.listData.concat(list)
-            this.last_id = list[list.length - 1].id
-            this.reload = false
-          }
-        },
-        fail: (data, code) => {
-          console.log('fail' + JSON.stringify(data))
-        }
-      })
-    },
-    goDetail: function(e) {
-      // 				if (!/前|刚刚/.test(e.published_at)) {
-      // 					e.published_at = dateUtils.format(e.published_at);
-      // 				}
-      let detail = {
-        author_name: e.author_name,
-        cover: e.cover,
-        id: e.id,
-        post_id: e.post_id,
-        published_at: e.published_at,
-        title: e.title
-      }
-      uni.navigateTo({
-        url: './detail?detailDate=' + encodeURIComponent(JSON.stringify(detail))
-      })
-    },
-    setTime: function(items) {
-      var newItems = []
-      items.forEach(e => {
-        newItems.push({
-          author_name: e.author_name,
-          cover: e.cover,
-          id: e.id,
-          post_id: e.post_id,
-          // dateUtils.format(e.published_at)
-          published_at: '',
-          title: e.title
-        })
-      })
-      return newItems
     }
   }
 }
