@@ -39,7 +39,10 @@ export default {
         if (token && userInfo) {
           commit('SET_TOKEN', token);
           commit('SET_USERINFO', userInfo);
-          resolve(userInfo);
+          resolve({
+            code: 200,
+            userInfo
+          });
         } else {
           reject(new Error('token或userInfo无！'));
         }

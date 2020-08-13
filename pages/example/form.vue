@@ -131,21 +131,20 @@ export default {
     },
     verify(formInfo) {
       const { section1 } = formInfo
-      let isPass = true
-
       if (!section1.title || !section1.title.trim()) {
-        isPass = false
         this.$showErr('标题不能为空!')
+        return false
       }
       if (section1.type.value === -1) {
-        isPass = false
         this.$showErr('类型不能为空!')
+        return false
       }
       if (!this.$validator.isMobilePhone(section1.tel, 'zh-CN')) {
-        isPass = false
         this.$showErr('手机号码不符合规范!')
+        return false
       }
-      return isPass
+
+      return true
     },
     adapt(formInfo) {
       const { section1 } = formInfo
@@ -162,7 +161,13 @@ export default {
       }
     },
     dealResult(res) {
-      console.log(res)
+      if (res && res.code === 200) {
+        uni.showToast({
+          title: '提交成功'
+        });
+      } else if(res && res.code !== -1) { // 验证不通过时返回-1,会在验证部分输出
+        this.$showErr(res)
+      }
     },
     // 图片预览
     viewImg(e) {

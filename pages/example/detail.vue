@@ -1,6 +1,6 @@
 <template>
   <view>
-    <view class="banner">
+    <view class="banner" @click="previewImage([info.img])">
       <image class="banner-img" :src="info.img"></image>
       <view class="banner-title">{{ info.title }}</view>
     </view>
@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import { tool } from '@/utils'
 import { testApis } from '@/apis'
 export default {
   data() {
@@ -34,10 +35,12 @@ export default {
     }
   },
   methods: {
+    previewImage: tool.previewImage,
     async fetchDetail() {
       const { code, data } = await testApis.loadMockInfo()
       if (code === 200) {
         this.info = data.obj
+        console.color(this.info)
       } else {
         this.$showErr('请求详情信息出错!')
       }

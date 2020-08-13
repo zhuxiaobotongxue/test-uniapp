@@ -1,8 +1,6 @@
 <template>
-<uni-shadow-root class="vant-weapp-picker-index"><import src="./toolbar.wxml"></import>
-
-<view class="van-picker custom-class">
-  <template is="toolbar" v-if="toolbarPosition === 'top'" :data="showToolbar, cancelButtonText, title, confirmButtonText"></template>
+<uni-shadow-root class="vant-weapp-picker-index"><view class="van-picker custom-class">
+  <toolbar v-bind="{showToolbar, cancelButtonText, title, confirmButtonText}" v-if="toolbarPosition === 'top'" wx-template-name="toolbar"></toolbar>
   <view v-if="loading" class="van-picker__loading">
     <loading color="#1989fa"></loading>
   </view>
@@ -11,14 +9,18 @@
     <view class="van-picker__mask" :style="'background-size: 100% '+((itemHeight * visibleItemCount - itemHeight) / 2)+'px'"></view>
     <view class="van-picker__frame van-hairline--top-bottom" :style="'height: '+(itemHeight)+'px'"></view>
   </view>
-  <template is="toolbar" v-if="toolbarPosition === 'bottom'" :data="showToolbar, cancelButtonText, title, confirmButtonText"></template>
+  <toolbar v-bind="{showToolbar, cancelButtonText, title, confirmButtonText}" v-if="toolbarPosition === 'bottom'" wx-template-name="toolbar"></toolbar>
 </view></uni-shadow-root>
 </template>
 <wxs module="isSimple" src="./index-isSimple.wxs"></wxs>
 <script>
+
+const __wxTemplateComponentProps = {"toolbar":["wxTemplateName","showToolbar","cancelButtonText","title","confirmButtonText"]}
+import __wxTemplateComponent0 from './toolbar.vue'
+__wxTemplateComponentProps['toolbar'] && __wxTemplateComponentProps['toolbar'].forEach(prop => __wxTemplateComponent0.props[prop] = {type: null})
 import PickerColumn from '../picker-column/index.vue'
 import Loading from '../loading/index.vue'
-global['__wxVueOptions'] = {components:{'picker-column': PickerColumn,'loading': Loading}}
+global['__wxVueOptions'] = {components:{'picker-column': PickerColumn,'loading': Loading,'toolbar' : __wxTemplateComponent0}}
 
 global['__wxRoute'] = 'vant-weapp/picker/index'
 'use strict';

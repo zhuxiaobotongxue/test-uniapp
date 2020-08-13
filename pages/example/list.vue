@@ -19,16 +19,19 @@
       </view>
     </view>
     <uni-load-more :status="list.load.status" :icon-size="16" :content-text="list.load.text" />
+    <fixed-btn icon="cuIcon-add" @onFixedBtnClick="handleFixedBtnClick"></fixed-btn>
   </view>
 </template>
 
 <script>
 import { uniLoadMore } from '@dcloudio/uni-ui'
+import { fixedBtn } from '@/components'
 import { testApis } from '@/apis'
 import { tool } from '@/utils'
 export default {
   components: {
-    uniLoadMore
+    uniLoadMore,
+    fixedBtn
   },
   data() {
     return {
@@ -112,6 +115,10 @@ export default {
       if (param.id) {
         tool.routerUtil.navigateTo({ url: './detail', params: { id: param.id } })
       }
+    },
+    // 触发悬浮按钮
+    handleFixedBtnClick() {
+      tool.routerUtil.navigateTo({ url: '' })
     }
   }
 }

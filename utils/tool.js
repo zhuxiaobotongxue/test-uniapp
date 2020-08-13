@@ -96,7 +96,10 @@ export const handleSubmit = async ({
   }
   // 不论是否验证通过，都会调用
   if (dealResult) {
-    dealResult(isPass ? res : {code: -1, msg: '验证未通过!'});
+    dealResult(isPass ? res : {
+      code: -1,
+      msg: '验证未通过!'
+    });
   }
 };
 // 复合结构数据中,根据一个变量,获取同节点的另一个变量值
@@ -277,6 +280,14 @@ export const handleMenu = (menu) => {
       icon: 'none',
       title: '开发中...',
       duration: 2500
+    })
+  }
+}
+//图片点击放大
+export const previewImage = (urls) => {
+  if (urls && urls.length) {
+    uni.previewImage({
+      urls
     })
   }
 }

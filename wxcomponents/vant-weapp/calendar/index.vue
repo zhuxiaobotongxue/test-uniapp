@@ -1,21 +1,23 @@
 <template>
-<uni-shadow-root class="vant-weapp-calendar-index"><import src="./calendar.wxml"></import>
-
-<van-popup v-if="poppable" :custom-class="'van-calendar__popup--'+(position)" close-icon-class="van-calendar__close-icon" :show="show" :round="round" :position="position" :closeable="showTitle || showSubtitle" :close-on-click-overlay="closeOnClickOverlay" @enter="onOpen" @close="onClose" @after-enter="onOpened" @after-leave="onClosed">
-  <template is="calendar" :data="title, subtitle, showTitle, showSubtitle, minDate, maxDate, type, color, showMark, formatter, rowHeight, currentDate, safeAreaInsetBottom, showConfirm, confirmDisabledText, confirmText, scrollIntoView, allowSameDay"></template>
+<uni-shadow-root class="vant-weapp-calendar-index"><van-popup v-if="poppable" :custom-class="'van-calendar__popup--'+(position)" close-icon-class="van-calendar__close-icon" :show="show" :round="round" :position="position" :closeable="showTitle || showSubtitle" :close-on-click-overlay="closeOnClickOverlay" @enter="onOpen" @close="onClose" @after-enter="onOpened" @after-leave="onClosed">
+  <calendar v-bind="{title, subtitle, showTitle, showSubtitle, minDate, maxDate, type, color, showMark, formatter, rowHeight, currentDate, safeAreaInsetBottom, showConfirm, confirmDisabledText, confirmText, scrollIntoView, allowSameDay}" wx-template-name="calendar"></calendar>
 </van-popup>
 
-<template v-else is="calendar" :data="title, subtitle, showTitle, showSubtitle, minDate, maxDate, type, color, showMark, formatter, rowHeight, currentDate, safeAreaInsetBottom, showConfirm, confirmDisabledText, confirmText, scrollIntoView, allowSameDay"></template>
+<calendar v-bind="{title, subtitle, showTitle, showSubtitle, minDate, maxDate, type, color, showMark, formatter, rowHeight, currentDate, safeAreaInsetBottom, showConfirm, confirmDisabledText, confirmText, scrollIntoView, allowSameDay}" v-else wx-template-name="calendar"></calendar>
 
 <van-toast id="van-toast"></van-toast></uni-shadow-root>
 </template>
 <wxs src="./index.wxs" module="computed"></wxs>
 <script>
+
+const __wxTemplateComponentProps = {"calendar":["wxTemplateName","title","subtitle","showTitle","showSubtitle","minDate","maxDate","type","color","showMark","formatter","rowHeight","currentDate","safeAreaInsetBottom","showConfirm","confirmDisabledText","confirmText","scrollIntoView","allowSameDay"]}
+import __wxTemplateComponent0 from './calendar.vue'
+__wxTemplateComponentProps['calendar'] && __wxTemplateComponentProps['calendar'].forEach(prop => __wxTemplateComponent0.props[prop] = {type: null})
 import Header from './components/header/index.vue'
 import Month from './components/month/index.vue'
 import VanButton from '../button/index.vue'
 import VanPopup from '../popup/index.vue'
-global['__wxVueOptions'] = {components:{'header': Header,'month': Month,'van-button': VanButton,'van-popup': VanPopup}}
+global['__wxVueOptions'] = {components:{'header': Header,'month': Month,'van-button': VanButton,'van-popup': VanPopup,'calendar' : __wxTemplateComponent0}}
 
 global['__wxRoute'] = 'vant-weapp/calendar/index'
 'use strict';

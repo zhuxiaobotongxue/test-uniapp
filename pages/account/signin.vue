@@ -176,7 +176,7 @@ export default {
     },
     async onSafeSubmit() {
       this.formInfo.isBtnDisabled = true
-      await tool.handleSubmit({
+      tool.handleSubmit({
         formInfo: this.formInfo,
         verify: this.verify,
         adapt: this.adapt,
@@ -188,54 +188,57 @@ export default {
     // 验证表单
     verify(formInfo) {
       const { account, captcha } = formInfo
-      let isPass = true
       const verifyObj = {
         ACCOUNT: () => {
           if (!this.$validator.isMobilePhone(account.name, 'zh-CN')) {
-            isPass = false
             this.$showErr('手机号码不符合规范!')
+            return false
           }
           if (!account.pwd || !account.pwd.trim()) {
-            isPass = false
             this.$showErr('密码不能为空!')
+            return false
           }
+          // 每种类型，若不出现错误，则返回true,保证验证通过
+          return true
         },
         CAPTCHA: () => {
           if (!this.$validator.isMobilePhone(captcha.tel, 'zh-CN')) {
-            isPass = false
             this.$showErr('手机号码不符合规范!')
+            return false
           }
           if (!captcha.code || !captcha.code.trim()) {
-            isPass = false
             this.$showErr('验证码不能为空!')
+            return false
           }
+          return true
         },
         REGIST: () => {
           if (!this.$validator.isMobilePhone(captcha.tel, 'zh-CN')) {
-            isPass = false
             this.$showErr('手机号码不符合规范!')
+            return false
           }
           if (!captcha.code || !captcha.code.trim()) {
-            isPass = false
             this.$showErr('验证码不能为空!')
+            return false
           }
           if (!captcha.pwd || !captcha.pwd.trim()) {
-            isPass = false
             this.$showErr('新密码不能为空!')
+            return false
           }
           if (!captcha.rePwd || !captcha.rePwd.trim()) {
-            isPass = false
             this.$showErr('重复密码不能为空!')
+            return false
           }
           if (captcha.pwd !== captcha.rePwd) {
-            isPass = false
             this.$showErr('两次密码输入不一致!')
+            return false
           }
+          return true
         }
       }
       verifyObj.FORGET = verifyObj.REGIST
-      verifyObj[this.formInfo.opType]()
-      return isPass
+      // 验证的结果一定要返回
+      return verifyObj[this.formInfo.opType]()
     },
     // 数据适配
     adapt(formInfo) {
@@ -257,6 +260,7 @@ export default {
         })
       }
       adaptObj.FORGET = adaptObj.REGIST
+      
       return adaptObj[this.formInfo.opType]()
     },
     // 提交
@@ -281,7 +285,11 @@ export default {
     },
     // 处理结果
     dealResult(res) {
-      tool.routerUtil.goHomePage()
+      if (res && res.code === 200) {
+        tool.routerUtil.goHomePage()
+      } else if (res && res.code !== -1) {
+        this.$showErr(res)
+      }
     }
   }
 }
