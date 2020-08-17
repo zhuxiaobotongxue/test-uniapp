@@ -12,6 +12,12 @@
         </picker>
       </view>
       <view class="cu-form-group">
+        <view class="title required">地址</view>
+        <view style="flex: 1;text-align: right;padding-right: 3px;" @click="openAddrPicker">{{formInfo.section1.addr.desc || '请选择地址'}}</view>
+        <text class='cuIcon-right text-gray'></text>
+        <lb-picker ref="addrPicker" v-model="formInfo.section1.addr.values" mode="multiSelector" :list="formInfo.section1.addr.sources" :level="3" @confirm="confirmAddr"></lb-picker>
+      </view>
+      <view class="cu-form-group">
         <view class="title required">手机号码</view>
         <input placeholder="输入框带标签" v-model="formInfo.section1.tel" />
         <view class="cu-capsule radius">
@@ -43,9 +49,48 @@ import { tool } from '@/utils'
 // import { AppConf } from '@/config'
 import { APP_CONST } from '@/constants'
 import { form } from '@/mixins'
+import LbPicker from '@/components/lb-picker'
+
+const ADDR_SOURCES = [
+  {
+    label: '选项1',
+    value: '1',
+    children: [
+      {
+        label: '选项1-1',
+        value: '1-1',
+        children: [
+          {
+            label: '选项1-1-1',
+            value: '1-1-1'
+          }
+        ]
+      }
+    ]
+  },
+  {
+    label: '选项2',
+    value: '2',
+    children: [
+      {
+        label: '选项2-1',
+        value: '2-1',
+        children: [
+          {
+            label: '选项2-1-1',
+            value: '2-1-1'
+          }
+        ]
+      }
+    ]
+  }
+]
 
 export default {
   mixins: [form],
+  components: {
+    LbPicker
+  },
   data() {
     return {
       formInfo: {
@@ -57,6 +102,11 @@ export default {
             opts: [],
             value: -1
           },
+          addr: {
+            sources: ADDR_SOURCES,
+            values: [],
+            desc: ''
+          },
           tel: '',
           imgs: []
         }
@@ -67,6 +117,15 @@ export default {
     this.init()
   },
   methods: {
+    // 打开地址多级联动
+    openAddrPicker(){
+      this.$refs.addrPicker.show()
+    },
+    // 地址确认选中
+    confirmAddr({ index, item, value, change }){
+      this.formInfo.section1.addr.values = value
+      this.formInfo.section1.addr.desc = item.map(item => item.label).join('')
+    },
     init() {
       this.initFieldOpts()
     },
@@ -139,6 +198,10 @@ export default {
         this.$showErr('类型不能为空!')
         return false
       }
+      if (!section1.addr.values.length) {
+        this.$showErr('地址不能为空!')
+        return false
+      }
       if (!this.$validator.isMobilePhone(section1.tel, 'zh-CN')) {
         this.$showErr('手机号码不符合规范!')
         return false
@@ -156,6 +219,7 @@ export default {
           aFieldVal: section1.type.opts[section1.type.value],
           bField: 'value'
         }),
+        addr: section1.addr.values,
         tel: section1.tel,
         imgs: section1.imgs
       }
