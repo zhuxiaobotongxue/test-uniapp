@@ -103,7 +103,7 @@ export default {
 <style lang="scss">
 .container {
   .user {
-    padding: 50rpx 40rpx;
+    padding: 80rpx 40rpx 0;
     background-color: #ffffff;
 
     &-avatar {
