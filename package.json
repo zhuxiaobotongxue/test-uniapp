@@ -30,7 +30,7 @@
     "md5": "^2.2.1",
     "query-string": "^6.9.0",
     "ramda": "^0.27.0",
-    "validator": "^13.0.0",
+    "validator": "^13.7.0",
     "vuex-persistedstate": "^2.7.0",
     "weixin-js-sdk": "^1.6.0",
     "zh-uni-request": "^1.0.2"
